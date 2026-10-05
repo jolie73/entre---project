@@ -1,45 +1,1049 @@
-import { useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
-import { Link, Route, Routes, useLocation } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, ChevronDown, MapPin, Menu, Sparkles, Telescope, X } from 'lucide-react'
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent, ReactNode } from "react";
+import {
+  Link,
+  NavLink,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  ChevronDown,
+  Compass,
+  Glasses,
+  HeartHandshake,
+  MapPin,
+  Menu,
+  Monitor,
+  Sparkles,
+  Users,
+  Wrench,
+  X,
+} from "lucide-react";
 
-const navItems = [
-  { label: 'The experience', to: '/experience#top' },
-  { label: 'Our stories', to: '/stories#top' },
-  { label: 'For partners', to: '/partners#top' },
-]
-const chapterStations = [
-  ['01', 'The castle gate', 'Surrender or fight? The first decision sets the story in motion.'],
-  ['02', 'The inner courtyard', 'Three families unite as the siege closes in.'],
-  ['03', 'The guided tour', 'Find the Rose of Silence before it is too late.'],
-  ['04', 'The treasury', 'Arm the defenders with what the castle can offer.'],
-  ['05', 'The outer wall', 'The enemy builds above you. Look up.'],
-  ['06', 'Back at the gate', 'Peace — and a castle given as a gift.'],
-]
-const questions = [
-  ['Who is StoryLense for?', 'StoryLense is designed as a shared experience for families with children from around six years old. Different roles make room for younger and older players alike.'],
-  ['How does a family play together?', 'Each player takes part in the same chapter from their own point of view. The challenges invite the group to look, decide and solve things together.'],
-  ['What devices are planned?', 'The concept includes a magic lens for children and AR glasses for visitors aged 13 and above. Final devices will be chosen as the first chapter takes shape.'],
-  ['Can we visit already?', 'Not yet. StoryLense is developing its first chapters. This website introduces the concept and the kind of experience we plan to create.'],
-]
+const nav = [
+  ["Overview", "/"],
+  ["Our stories", "/stories"],
+  ["Prices", "/prices"],
+  ["Contact us", "/contact"],
+];
+const partnerLink = "/contact?topic=partnership#contact-form";
+const services = [
+  {
+    icon: BookOpen,
+    title: "A story that belongs to your castle",
+    text: "A bespoke chapter inspired by your people, places and history, developed with your team and historical expertise.",
+  },
+  {
+    icon: Compass,
+    title: "An adventure made to be shared",
+    text: "Interactive challenges, meaningful roles and a route that turns a family visit into a story everyone helps to tell.",
+  },
+  {
+    icon: Sparkles,
+    title: "History, brought into view",
+    text: "Production and technical implementation of the AR scenes that add a new layer to your real surroundings.",
+  },
+  {
+    icon: Glasses,
+    title: "The tools to step inside",
+    text: "Magic lenses and AR glasses, with device provision and fleet operation included in the partnership.",
+  },
+  {
+    icon: Users,
+    title: "A team ready for the first chapter",
+    text: "On-site setup and staff training, so your team can confidently welcome visitors into the experience.",
+  },
+  {
+    icon: Wrench,
+    title: "Support beyond opening day",
+    text: "Ongoing technical support and maintenance to keep the experience ready for the next adventure.",
+  },
+];
+const stations = [
+  [
+    "The castle gate",
+    "Surrender or fight?",
+    "Every adventure begins with a choice. Yours starts at the gate.",
+  ],
+  [
+    "The inner courtyard",
+    "Three families. One purpose.",
+    "Discover the people whose stories are woven into the castle.",
+  ],
+  [
+    "The guided tour",
+    "Find the Rose of Silence.",
+    "Look closely. The smallest details can hold the biggest clues.",
+  ],
+  [
+    "The treasury",
+    "Prepare the defenders.",
+    "Explore the treasury and decide what the castle needs most.",
+  ],
+  [
+    "The outer wall",
+    "Look beyond the walls.",
+    "An enemy builds above you. A new perspective changes everything.",
+  ],
+  [
+    "Back at the gate",
+    "A different kind of ending.",
+    "Return to where it began, with peace and a story to take home.",
+  ],
+];
 
-function Logo() { return <Link className="logo" to="/#top" aria-label="StoryLense home"><span className="logo-mark">✦</span><span>story<span>lense</span></span></Link> }
-function Header() {
-  const [open, setOpen] = useState(false); const location = useLocation()
-  return <header className="site-header"><div className="nav-shell"><Logo /><nav className={open ? 'nav-links is-open' : 'nav-links'} aria-label="Primary navigation">{navItems.map(item => <Link key={item.to} className={location.pathname === item.to.split('#')[0] ? 'active' : ''} to={item.to} onClick={() => setOpen(false)}>{item.label}</Link>)}<Link className="nav-cta" to="/experience#how-it-works" onClick={() => setOpen(false)}>Explore the experience <ArrowUpRight size={16} /></Link></nav><button className="menu-toggle" onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X /> : <Menu />}</button></div></header>
+function Brand() {
+  return (
+    <Link className="brand" to="/#top" aria-label="StoryLens home">
+      <span className="brand-symbol" aria-hidden="true">
+        ✦
+      </span>
+      <span>
+        Story<span className="brand-gold">Lens</span>
+        <small>TECHNOLOGIES</small>
+      </span>
+    </Link>
+  );
 }
-function Footer() { return <footer className="site-footer"><div className="footer-top"><Logo /><p>History you can play.<br />A new way to visit the past.</p><div className="footer-links"><div><span className="eyebrow">Explore</span>{navItems.map(item => <Link key={item.to} to={item.to}>{item.label}</Link>)}</div><div><span className="eyebrow">StoryLense</span><Link to="/experience#how-it-works">How it works</Link><Link to="/stories#chapter">The first chapter</Link><span className="muted-link">Contact details coming soon</span></div></div></div><div className="footer-bottom"><span>© 2026 StoryLense Technologies GmbH</span><span>Concept website · Details to follow</span><span aria-label="StoryLense">✦</span></div></footer> }
-function Page({ title, children }: { title: string; children: ReactNode }) { const location = useLocation(); useEffect(() => { document.title = `${title} — StoryLense` }, [title]); useEffect(() => { const target = location.hash ? document.getElementById(location.hash.slice(1)) : null; requestAnimationFrame(() => target ? target.scrollIntoView() : window.scrollTo(0, 0)); }, [location.pathname, location.hash]); return <><Header /><main>{children}</main><Footer /></> }
+function Button({
+  to,
+  children,
+  light = false,
+}: {
+  to: string;
+  children: ReactNode;
+  light?: boolean;
+}) {
+  return (
+    <Link className={`button${light ? " light" : ""}`} to={to}>
+      {children}
+      <ArrowUpRight size={17} />
+    </Link>
+  );
+}
+function Eyebrow({ children }: { children: ReactNode }) {
+  return (
+    <p className="eyebrow">
+      <span aria-hidden="true">✦</span>
+      {children}
+    </p>
+  );
+}
+function Header() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const toggle = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    setOpen(false);
+  }, [location]);
+  return (
+    <header className="header">
+      <div className="header-inner">
+        <Brand />
+        <button
+          ref={toggle}
+          className="menu-toggle"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="primary-nav"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
+        <nav
+          id="primary-nav"
+          className={open ? "nav open" : "nav"}
+          aria-label="Main navigation"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setOpen(false);
+              toggle.current?.focus();
+            }
+          }}
+        >
+          {nav.map(([label, to]) => (
+            <NavLink
+              end={to === "/"}
+              key={to}
+              to={`${to}#top`}
+              className={({ isActive }) =>
+                `${isActive ? "active " : ""}${to === "/contact" ? "nav-contact" : ""}`
+              }
+            >
+              {label}
+              {to === "/contact" && <ArrowUpRight size={15} />}
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+}
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-main container">
+        <div>
+          <Brand />
+          <p>
+            Real places. Shared adventures.
+            <br />
+            Stories that stay with you.
+          </p>
+        </div>
+        <div className="footer-nav">
+          <span className="footer-label">EXPLORE</span>
+          {nav.map(([label, to]) => (
+            <Link key={to} to={`${to}#top`}>
+              {label}
+            </Link>
+          ))}
+        </div>
+        <div className="footer-partner">
+          <span className="footer-label">FOR HISTORIC PLACES</span>
+          <h3>
+            Your castle.
+            <br />
+            The next chapter.
+          </h3>
+          <Link className="text-link" to={partnerLink}>
+            Let’s tell it together <ArrowUpRight size={17} />
+          </Link>
+        </div>
+      </div>
+      <div className="footer-bottom container">
+        <span>© {new Date().getFullYear()} StoryLens</span>
+        <span>Concept in development</span>
+        <span>
+          Made for curious minds <span aria-hidden="true">✦</span>
+        </span>
+      </div>
+    </footer>
+  );
+}
+function Layout({ title, children }: { title: string; children: ReactNode }) {
+  const location = useLocation();
+  useEffect(() => {
+    document.title = `${title} — StoryLens`;
+    const frame = requestAnimationFrame(() => {
+      const id = location.hash.slice(1);
+      const el = id ? document.getElementById(id) : null;
+      if (el) el.scrollIntoView();
+      else window.scrollTo(0, 0);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [location, title]);
+  return (
+    <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <Header />
+      <main id="main">{children}</main>
+      <Footer />
+    </>
+  );
+}
+function Faq({ items }: { items: string[][] }) {
+  return (
+    <div className="faq-list">
+      {items.map(([q, a]) => (
+        <details key={q}>
+          <summary>
+            {q}
+            <ChevronDown size={18} />
+          </summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </div>
+  );
+}
+function Closing({ partners = false }: { partners?: boolean }) {
+  return (
+    <section className="closing container">
+      <span className="large-star" aria-hidden="true">
+        ✦
+      </span>
+      <Eyebrow>
+        {partners
+          ? "A new chapter starts with a conversation"
+          : "There is more to every castle"}
+      </Eyebrow>
+      <h2>
+        {partners ? (
+          <>
+            Let’s tell your
+            <br />
+            <em>castle’s story.</em>
+          </>
+        ) : (
+          <>
+            A little curiosity.
+            <br />
+            <em>A whole new world.</em>
+          </>
+        )}
+      </h2>
+      <Button to={partners ? partnerLink : "/stories#chapter"}>
+        {partners ? "Discuss your castle" : "Discover our first story"}
+      </Button>
+    </section>
+  );
+}
 
-function CastleScene({ variant: _variant = 'night' }: { variant?: 'night' | 'day' | 'dawn' }) { return <div className="castle-scene scene-placeholder" aria-label="StoryLense concept visual placeholder"><div className="scene-sun" /><span className="scene-star one">✦</span><span className="scene-star two">✦</span><div className="scene-wall"><i /><i /><i /><b /><b /><b /></div><div className="scene-hill" /><span className="scene-placeholder-label">StoryLense concept visual</span></div> }
-function HeroArt() { return <div className="hero-art" aria-label="Concept view of StoryLense at a castle"><CastleScene /><div className="ar-panel"><span>1331</span><strong>The siege begins</strong><small>Look through the lens</small></div><div className="hero-figure"><span className="figure-head" /><span className="figure-body" /><span className="figure-lens">✦</span></div></div> }
-function VideoPreview() { return <section className="video-section section-wrap"><div className="video-copy"><span className="eyebrow">A glimpse inside</span><h2>Step into<br /><em>the story.</em></h2><p>Picture a quiet courtyard. Then put on the lens and watch a moment from 1331 unfold around your family.</p><span className="video-note"><span className="pulse-dot" /> Film coming soon</span></div><div className="video-preview" role="img" aria-label="StoryLense video preview image"><CastleScene variant="dawn" /><div className="video-caption"><span>Same castle</span><strong>A different story</strong></div></div></section> }
-function Faq() { return <section className="faq section-wrap"><div className="faq-heading"><span className="eyebrow">Good to know</span><h2>Questions families<br /><em>might ask.</em></h2></div><div className="faq-list">{questions.map(([question, answer]) => <details key={question}><summary>{question}<ChevronDown size={18} /></summary><p>{answer}</p></details>)}</div></section> }
+function Home() {
+  return (
+    <Layout title="History you can play">
+      <section className="home-hero container" id="top">
+        <div className="hero-copy">
+          <Eyebrow>Real castles. Extraordinary adventures.</Eyebrow>
+          <h1>
+            History
+            <br />
+            you can <em>play.</em>
+          </h1>
+          <p>
+            Turn a castle visit into a family adventure.
+            <br className="desktop-break" /> Step into the past. Discover your
+            part in the story.
+          </p>
+          <div className="hero-actions">
+            <Button to="/stories#chapter">Explore our stories</Button>
+            <Link className="text-link" to="/#how-it-works">
+              How it works <ArrowDown size={16} />
+            </Link>
+          </div>
+          <div className="hero-footnote">
+            <span className="tiny-star">✦</span> For curious kids. And the
+            grown-ups who come along.
+          </div>
+        </div>
+        <figure className="hero-image">
+          <img
+            src="/images/castle-family.jpg"
+            alt="Concept illustration of a castle with a glowing adventure route"
+            fetchPriority="high"
+          />
+          <div className="image-overlay">
+            <span>YOUR NEXT ADVENTURE</span>
+            <strong>
+              Some stories are
+              <br />
+              waiting to be lived.
+            </strong>
+          </div>
+          <figcaption>StoryLens concept illustration</figcaption>
+          <span className="image-year" aria-hidden="true">
+            1331
+          </span>
+        </figure>
+      </section>
+      <div className="promise-strip">
+        <div className="container">
+          <span>
+            <MapPin size={16} /> Rooted in real places
+          </span>
+          <i>✦</i>
+          <span>
+            <Users size={17} /> Made to play together
+          </span>
+          <i>✦</i>
+          <span>
+            <Sparkles size={16} /> A new lens on history
+          </span>
+        </div>
+      </div>
+      <section className="section container" id="how-it-works">
+        <div className="section-heading">
+          <div>
+            <Eyebrow>The experience</Eyebrow>
+            <h2>
+              A castle visit.
+              <br />
+              <em>With a twist.</em>
+            </h2>
+          </div>
+          <p>
+            The walls are real. The history is all around you. StoryLens adds
+            the adventure that brings everyone into the picture.
+          </p>
+        </div>
+        <div className="steps">
+          {[
+            [
+              Glasses,
+              "Pick up your lens",
+              "Choose your role and see the castle through fresh eyes.",
+            ],
+            [
+              Compass,
+              "Follow the story",
+              "Explore real rooms and courtyards, finding clues along the way.",
+            ],
+            [
+              HeartHandshake,
+              "Play your part",
+              "Make decisions and solve challenges together. This is your family’s chapter.",
+            ],
+          ].map(([Icon, heading, text], i) => {
+            const I = Icon as typeof Glasses;
+            return (
+              <article key={String(heading)}>
+                <div className="step-top">
+                  <I size={29} strokeWidth={1.3} />
+                  <span>0{i + 1}</span>
+                </div>
+                <h3>{String(heading)}</h3>
+                <p>{String(text)}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+      <section className="family-section">
+        <div className="container family-grid">
+          <figure>
+            <img
+              src="/images/courtyard.jpg"
+              alt="Concept comparison of a quiet courtyard and an imagined medieval scene"
+              loading="lazy"
+            />
+            <figcaption>
+              One courtyard. Two perspectives. · Concept illustration
+            </figcaption>
+          </figure>
+          <div>
+            <Eyebrow>Everyone has a part to play</Eyebrow>
+            <h2>
+              Small explorers.
+              <br />
+              <em>Big imaginations.</em>
+            </h2>
+            <p>
+              A shared adventure, with a different perspective for every
+              generation.
+            </p>
+            <div className="role" id="magic-lens">
+              <span>01</span>
+              <div>
+                <h3>A little magic in their hands</h3>
+                <p>
+                  A magic lens gives younger adventurers their own mission and a
+                  reason to look closer.
+                </p>
+                <small>Magic lens · Designed for ages 6–12</small>
+              </div>
+            </div>
+            <div className="role" id="ar-glasses">
+              <span>02</span>
+              <div>
+                <h3>A new view of the past</h3>
+                <p>
+                  AR glasses reveal another layer of the story for teens and
+                  grown-ups.
+                </p>
+                <small>AR glasses · Planned for ages 13+</small>
+              </div>
+            </div>
+            <p className="fineprint">
+              Device concepts and age guidance are still in development.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="section container story-teaser">
+        <div>
+          <Eyebrow>The first chapter</Eyebrow>
+          <h2>
+            The Siege
+            <br />
+            of Eltz, <em>1331.</em>
+          </h2>
+          <p>
+            Six stations. One castle under threat. A family with a part to play
+            in its story.
+          </p>
+          <Link className="text-link" to="/stories#chapter">
+            Step into the chapter <ArrowUpRight size={18} />
+          </Link>
+          <span className="concept-label">CONCEPT CHAPTER · BURG ELTZ</span>
+        </div>
+        <figure>
+          <img
+            src="/images/eltz-route.jpg"
+            alt="Imagined story route around a medieval castle"
+            loading="lazy"
+          />
+          <figcaption>
+            Concept illustration · Not a confirmed partnership
+          </figcaption>
+        </figure>
+      </section>
+      <section className="film-section container">
+        <div>
+          <Eyebrow>A glimpse inside</Eyebrow>
+          <h2>
+            Picture the
+            <br />
+            <em>possibilities.</em>
+          </h2>
+          <p>
+            Our story is taking shape. A closer look at the experience is on its
+            way.
+          </p>
+        </div>
+        <div
+          className="film-placeholder"
+          role="img"
+          aria-label="StoryLens film coming soon"
+        >
+          <span className="film-star">✦</span>
+          <span>A NEW WAY TO VISIT THE PAST</span>
+          <strong>Every place has a story.</strong>
+          <span className="film-status">Film coming soon</span>
+        </div>
+      </section>
+      <section className="section container faq-section">
+        <div>
+          <Eyebrow>Good to know</Eyebrow>
+          <h2>
+            A few things
+            <br />
+            <em>you might wonder.</em>
+          </h2>
+        </div>
+        <Faq
+          items={[
+            [
+              "Who is StoryLens for?",
+              "Families with curious children, with different roles designed for younger players, teens and grown-ups.",
+            ],
+            [
+              "Can we book an adventure yet?",
+              "Not yet. StoryLens is a concept in development. Our first chapter shows the kind of experience we plan to create.",
+            ],
+            [
+              "Do we all play the same story?",
+              "Yes. The concept brings the family into one chapter, with different perspectives and challenges to solve together.",
+            ],
+            [
+              "Can our castle become part of StoryLens?",
+              "We would love to explore your story. Visit Prices to discover the partnership and included services, then get in touch through our demo contact form.",
+            ],
+          ]}
+        />
+      </section>
+      <Closing />
+    </Layout>
+  );
+}
 
-function Home() { return <Page title="History you can play"><section className="hero" id="top"><div className="hero-content"><span className="eyebrow">AR story games for castles</span><h1>History<br /><em>you can play.</em></h1><p className="hero-lede">AR story games that turn castle visits into family adventures.</p><div className="hero-actions"><Link className="button button-light" to="/experience#how-it-works">Explore the experience <ArrowUpRight size={17} /></Link><Link className="subtle-link" to="/stories#chapter">Discover the first story <ArrowRight size={16} /></Link></div></div><HeroArt /><div className="scroll-cue"><span>Scroll to explore</span><span className="line" /></div></section><VideoPreview /><section className="how-section section-wrap"><div className="section-intro"><span className="eyebrow">How it works</span><h2>One castle.<br /><em>Your story.</em></h2><p>StoryLense adds an adventure to the visit without taking visitors away from the place itself.</p></div><div className="how-grid"><article><span className="step-number">01</span><Telescope /><h3>Pick up your lens</h3><p>Choose a role and get ready to see the familiar castle from a new perspective.</p></article><article><span className="step-number">02</span><MapPin /><h3>Follow the story</h3><p>Move through real rooms and courtyards as the next scene reveals itself.</p></article><article><span className="step-number">03</span><Sparkles /><h3>Play together</h3><p>Solve the chapter as a family. Every player has something to discover.</p></article></div><Link className="text-link centered-link" to="/experience#how-it-works">See the full experience <ArrowUpRight size={16} /></Link></section><section className="roles-feature"><div className="roles-visual"><CastleScene variant="day" /><div className="lens-disc">✦<span>Magic lens</span></div></div><div className="roles-copy"><span className="eyebrow">Everyone has a part to play</span><h2>Made for<br /><em>curious families.</em></h2><p>Children take on a mission with the magic lens. Older players discover another layer through AR glasses. The castle brings everyone together.</p><div className="role-links"><Link to="/experience#magic-lens">For curious kids <ArrowUpRight size={15} /></Link><Link to="/experience#ar-glasses">For older explorers <ArrowUpRight size={15} /></Link></div></div></section><section className="story-preview"><div className="story-preview-art"><CastleScene variant="night" /><span className="story-tag">Concept chapter 01</span></div><div className="story-preview-copy"><span className="eyebrow">Our first story</span><h2>The Siege<br /><em>of Eltz, 1331.</em></h2><p>Six stations. One castle under threat. A family becomes its youngest line of defence.</p><Link className="text-link" to="/stories#chapter">Explore the chapter <ArrowUpRight size={16} /></Link></div></section><Faq /><section className="closing-cta"><span className="eyebrow">The adventure begins here</span><h2>Discover your part<br /><em>in the story.</em></h2><Link className="button button-gold" to="/experience#how-it-works">Explore the experience <ArrowUpRight size={17} /></Link><p>Represent a castle or cultural organisation? <Link to="/partners#contact">Meet StoryLense for partners <ArrowRight size={14} /></Link></p></section></Page> }
+function Stories() {
+  return (
+    <Layout title="Our stories">
+      <section className="page-intro container" id="top">
+        <Eyebrow>Our stories</Eyebrow>
+        <h1>
+          Old walls.
+          <br />
+          <em>New adventures.</em>
+        </h1>
+        <p>Every castle has a story. We give your family a part in it.</p>
+      </section>
+      <section className="chapter container" id="chapter">
+        <figure className="chapter-visual">
+          <img
+            src="/images/eltz-route.jpg"
+            alt="Concept illustration of the Eltz story with glowing route markers"
+          />
+          <div className="chapter-caption">
+            <span>CHAPTER 01 · CONCEPT</span>
+            <h2>
+              The Siege of Eltz,
+              <br />
+              <em>1331.</em>
+            </h2>
+            <span>
+              <MapPin size={15} /> Inspired by Burg Eltz, Germany
+            </span>
+          </div>
+          <figcaption>Concept illustration</figcaption>
+        </figure>
+        <div className="chapter-intro">
+          <p className="large-copy">
+            A quiet Sunday.
+            <br />A castle under siege.
+            <br />
+            <em>And you, right in the middle.</em>
+          </p>
+          <div>
+            <p>
+              Follow a trail through gates, courtyards and hidden details. Meet
+              the castle’s story through choices, clues and a little
+              imagination.
+            </p>
+            <p className="fineprint">
+              This is a creative concept chapter. It does not represent a
+              current partnership with Burg Eltz or an available experience.
+            </p>
+            <a className="text-link" href="#stations">
+              Explore the six stations <ArrowDown size={17} />
+            </a>
+          </div>
+        </div>
+      </section>
+      <section className="route-section section" id="stations">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>The journey</Eyebrow>
+              <h2>
+                Six moments.
+                <br />
+                <em>One shared story.</em>
+              </h2>
+            </div>
+            <p>
+              Each stop invites you to look a little closer, make a choice and
+              discover what happens next.
+            </p>
+          </div>
+          <div className="station-grid">
+            {stations.map(([name, title, text], i) => (
+              <article key={name}>
+                <span className="station-number">0{i + 1}</span>
+                <div>
+                  <span className="station-place">{name}</span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="next-story container">
+        <span aria-hidden="true">✦</span>
+        <div>
+          <Eyebrow>More stories to come</Eyebrow>
+          <h2>
+            The next chapter
+            <br />
+            <em>could be yours.</em>
+          </h2>
+          <p>
+            We imagine a collection of adventures, each rooted in the history of
+            a different place.
+          </p>
+        </div>
+        <Link className="text-link" to="/prices#services">
+          Explore the castle partnership <ArrowUpRight size={19} />
+        </Link>
+      </section>
+      <Closing partners />
+    </Layout>
+  );
+}
 
-function InteriorHero({ eyebrow, title, intro, scene = 'night' }: { eyebrow: string; title: ReactNode; intro: string; scene?: 'night' | 'day' | 'dawn' }) { return <section className="interior-hero" id="top"><div><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p></div><CastleScene variant={scene} /></section> }
-function Experience() { return <Page title="The experience"><InteriorHero eyebrow="The experience" title={<>A story<br /><em>in your hands.</em></>} intro="StoryLense turns a castle visit into a shared adventure, with a role for every curious mind." /><section className="experience-intro section-wrap" id="overview"><span className="eyebrow">A visit becomes a chapter</span><p className="large-quote">You arrive at a castle. A story waits in its rooms, its courtyards and the details you nearly walked past.</p></section><section className="steps section-wrap" id="how-it-works"><div className="section-intro"><span className="eyebrow">How a visit unfolds</span><h2>Follow the chapter<br /><em>at your own pace.</em></h2></div><div className="steps-list">{[['01','Arrive at the castle','Pick up your lens, choose your role and get ready to look at the familiar in a new way.'],['02','Enter the story','Follow clues through real rooms and courtyards as the past begins to appear around you.'],['03','Play your part','Solve a challenge together. Every person sees the story from a different angle.'],['04','Leave with a memory','The castle stays with you long after the final scene.']].map(step => <article className="step" key={step[0]}><span>{step[0]}</span><div><h3>{step[1]}</h3><p>{step[2]}</p></div></article>)}</div></section><section className="courtyard-section" id="courtyard"><div className="courtyard-art"><CastleScene variant="dawn" /><div className="courtyard-note"><span>Without StoryLense</span><strong>A quiet courtyard</strong></div><div className="courtyard-note active"><span>With StoryLense</span><strong>1331 comes alive</strong></div></div><div><span className="eyebrow">One place, two views</span><h2>The inner<br /><em>courtyard.</em></h2><p>A quiet courtyard can become the moment three families decide to stand together. The story reveals a new layer of the real place without replacing it.</p></div></section><section className="roles-section"><div className="section-wrap"><span className="eyebrow">Choose your lens</span><div className="roles-grid"><article id="magic-lens"><div className="role-icon">✦</div><h2>The magic lens</h2><p>Designed for younger adventurers. It gives children a mission, a point of view and a reason to look closer.</p><small>For kids aged 6–12 · Concept in development</small></article><article id="ar-glasses"><div className="role-icon glasses">◌</div><h2>AR glasses</h2><p>A deeper layer for older players, with historical detail that brings the world around them into focus.</p><small>For ages 13+ · Concept in development</small></article></div></div></section><section className="experience-next section-wrap"><span className="eyebrow">Continue the story</span><h2>Meet the first<br /><em>castle chapter.</em></h2><Link className="button button-gold" to="/stories#chapter">Explore the Siege of Eltz <ArrowUpRight size={17} /></Link></section></Page> }
-function Stories() { return <Page title="Our stories"><InteriorHero eyebrow="Our stories · Concept chapter 01" title={<>The Siege<br /><em>of Eltz, 1331.</em></>} intro="A first glimpse of the kind of chapter StoryLense could bring to a real castle. Burg Eltz is our concept example." scene="dawn" /><section className="story-intro section-wrap" id="chapter"><div className="quote-mark">“</div><p className="large-quote">A family arrives on a quiet Sunday. By the time they leave, the castle has asked them to defend it.</p><p>This chapter is a creative concept that shows the StoryLense format. It does not represent a current partnership or available visit.</p></section><section className="stations section-wrap" id="stations"><div className="section-intro"><span className="eyebrow">Six moments in one chapter</span><h2>A castle<br /><em>under threat.</em></h2></div><div className="stations-list">{chapterStations.map(station => <article className="station" key={station[0]}><span>{station[0]}</span><div><h3>{station[1]}</h3><p>{station[2]}</p></div></article>)}</div></section><section className="next-chapter"><span className="eyebrow">More stories to come</span><h2>Every castle<br /><em>has a chapter.</em></h2><p>Each StoryLense chapter begins with the people, places and history that make one castle unlike any other.</p></section></Page> }
-function Partners() { return <Page title="For partners"><InteriorHero eyebrow="For castles & cultural partners" title={<>Give history<br /><em>a new audience.</em></>} intro="StoryLense helps historic places welcome families with stories made for the rooms, walls and people who care for them." scene="day" /><section className="partner-copy section-wrap" id="about-partnerships"><div><span className="eyebrow">A shared project</span><h2>Built around<br /><em>the real place.</em></h2></div><div><p>Every chapter begins with the castle itself. Our story and game team works alongside site staff and historians to turn local history into an experience families can share.</p><p>The castle remains the hero. StoryLense adds a reason to look closer, stay longer and come back with someone you love.</p></div></section><section className="model-section" id="model"><div className="section-wrap"><div className="section-intro"><span className="eyebrow">A concept model</span><h2>Made together,<br /><em>shared together.</em></h2></div><div className="model-grid"><article><span>01</span><h3>Families play</h3><p>A small add-on at the ticket desk lets each family enter the chapter with a device.</p></article><article><span>02</span><h3>Funders build</h3><p>Foundations, heritage charities and local sponsors can help bring each new chapter to life.</p></article><article><span>03</span><h3>Castles share</h3><p>Participating sites could earn a share from every game played. The exact model will be developed with partners.</p></article></div></div></section><section className="contact-section section-wrap" id="contact"><span className="eyebrow">Start a conversation</span><h2>Have a place<br /><em>with a story?</em></h2><p>We are shaping the first chapters now and would love to hear from castle teams, cultural organisations and funders.</p><span className="contact-placeholder">Contact details coming soon</span></section></Page> }
-export default function App() { return <Routes><Route path="/" element={<Home />} /><Route path="/experience" element={<Experience />} /><Route path="/stories" element={<Stories />} /><Route path="/partners" element={<Partners />} /><Route path="*" element={<Home />} /></Routes> }
+function Prices() {
+  return (
+    <Layout title="Prices & partnership">
+      <section className="page-intro pricing-intro container" id="top">
+        <Eyebrow>For castles & historic places</Eyebrow>
+        <h1>
+          We grow
+          <br />
+          <em>when you grow.</em>
+        </h1>
+        <p>
+          A partnership built on shared success.
+          <br />
+          Bring your history to life, and share in every story played.
+        </p>
+        <Button to={partnerLink}>Discuss your castle</Button>
+      </section>
+      <section className="pricing-model container" id="partnership">
+        <div className="pricing-model-copy">
+          <Eyebrow>Pay for performance</Eyebrow>
+          <h2>
+            One experience.
+            <br />
+            <em>Shared rewards.</em>
+          </h2>
+          <p>
+            Our fee is tied to the StoryLens add-on revenue your castle earns.
+            You keep your regular admission revenue in full, plus your share of
+            each StoryLens add-on.
+          </p>
+          <div className="admission-note">
+            <Check size={18} />
+            <span>Your regular admission revenue stays with you.</span>
+          </div>
+        </div>
+        <div className="split-panel">
+          <div className="split-heading">
+            <span>THE STORYLENS ADD-ON</span>
+            <span aria-hidden="true">✦</span>
+          </div>
+          <div className="split-numbers">
+            <div>
+              <strong>
+                80<span>%</span>
+              </strong>
+              <h3>StoryLens</h3>
+              <p>
+                Creating and delivering
+                <br />
+                the experience
+              </p>
+            </div>
+            <div>
+              <strong>
+                20<span>%</span>
+              </strong>
+              <h3>Your castle</h3>
+              <p>
+                Your share of every
+                <br />
+                StoryLens add-on
+              </p>
+            </div>
+          </div>
+          <div className="split-bar" aria-hidden="true">
+            <span />
+            <span />
+          </div>
+          <p className="split-note">
+            The split applies to the StoryLens surcharge only.
+          </p>
+        </div>
+      </section>
+      <section className="section services-section" id="services">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>Our services · Included in the partnership</Eyebrow>
+              <h2>
+                Your history.
+                <br />
+                <em>Our craft.</em>
+              </h2>
+            </div>
+            <p>
+              Everything your castle needs to bring history to life. From the
+              first idea to the next family through your gates.
+            </p>
+          </div>
+          <div className="services-grid">
+            {services.map(({ icon: Icon, title, text }, i) => (
+              <article key={title}>
+                <div className="service-icon">
+                  <Icon size={26} strokeWidth={1.35} />
+                  <span>0{i + 1}</span>
+                </div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+                <span className="included">
+                  <Check size={13} /> Included
+                </span>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section container partnership-process">
+        <div>
+          <Eyebrow>Made together</Eyebrow>
+          <h2>
+            We bring the experience.
+            <br />
+            <em>You bring the place.</em>
+          </h2>
+        </div>
+        <p>
+          Your team knows the castle best. We work with that knowledge to shape
+          a chapter that belongs to your site, your history and your visitors.
+        </p>
+      </section>
+      <section className="faq-section container pricing-faq">
+        <div>
+          <Eyebrow>A clear partnership</Eyebrow>
+          <h2>
+            Good questions.
+            <br />
+            <em>Simple answers.</em>
+          </h2>
+        </div>
+        <Faq
+          items={[
+            [
+              "What does the 80/20 split apply to?",
+              "Only the additional StoryLens surcharge. StoryLens receives 80% and your castle keeps 20%. Your regular admission revenue remains with your castle.",
+            ],
+            [
+              "What is included in the partnership?",
+              "The bespoke story, game development, AR production, device provision and operation, on-site setup and staff training, and ongoing technical support and maintenance.",
+            ],
+            [
+              "Do you take a share of ordinary admission tickets?",
+              "No. The revenue share applies to the StoryLens add-on, not your regular castle admission.",
+            ],
+            [
+              "How do we start?",
+              "Tell us about your castle and the story you would like to share. The contact form currently demonstrates the inquiry process; the partnership concept is still in development.",
+            ],
+          ]}
+        />
+      </section>
+      <Closing partners />
+    </Layout>
+  );
+}
+
+type ContactFields = {
+  name: string;
+  email: string;
+  castle: string;
+  topic: string;
+  message: string;
+};
+function Contact() {
+  const location = useLocation();
+  const partnership =
+    new URLSearchParams(location.search).get("topic") === "partnership";
+  const [fields, setFields] = useState<ContactFields>({
+    name: "",
+    email: "",
+    castle: "",
+    topic: partnership ? "Castle partnership" : "",
+    message: partnership
+      ? "I would like to learn more about the StoryLens partnership for our castle."
+      : "",
+  });
+  const [errors, setErrors] = useState<Partial<ContactFields>>({});
+  const [submitted, setSubmitted] = useState(false);
+  const form = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (partnership)
+      setFields((f) => ({
+        ...f,
+        topic: "Castle partnership",
+        message:
+          f.message ||
+          "I would like to learn more about the StoryLens partnership for our castle.",
+      }));
+  }, [partnership]);
+  function update(key: keyof ContactFields, value: string) {
+    setFields((f) => ({ ...f, [key]: value }));
+    setErrors((e) => ({ ...e, [key]: undefined }));
+    setSubmitted(false);
+  }
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    const next: Partial<ContactFields> = {};
+    if (!fields.name.trim()) next.name = "Please enter your name.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim()))
+      next.email = "Please enter a valid email address.";
+    if (!fields.topic) next.topic = "Please choose a topic.";
+    if (!fields.message.trim())
+      next.message = "Please tell us a little about your inquiry.";
+    setErrors(next);
+    setSubmitted(Object.keys(next).length === 0);
+    if (Object.keys(next).length)
+      requestAnimationFrame(() =>
+        form.current
+          ?.querySelector<HTMLElement>('[aria-invalid="true"]')
+          ?.focus(),
+      );
+  }
+  const props = (key: keyof ContactFields) => ({
+    id: key,
+    name: key,
+    value: fields[key],
+    "aria-invalid": !!errors[key] as boolean,
+    "aria-describedby": errors[key] ? `${key}-error` : undefined,
+    onChange: (e: { target: { value: string } }) => update(key, e.target.value),
+  });
+  const error = (key: keyof ContactFields) =>
+    errors[key] ? (
+      <span className="field-error" id={`${key}-error`}>
+        {errors[key]}
+      </span>
+    ) : null;
+  return (
+    <Layout title="Contact us">
+      <section className="contact-layout container" id="top">
+        <div className="contact-copy">
+          <Eyebrow>Contact us</Eyebrow>
+          <h1>
+            Every story
+            <br />
+            starts with
+            <br />
+            <em>a hello.</em>
+          </h1>
+          <p>
+            A castle with a story to tell?
+            <br />A question about the adventure?
+            <br />
+            You’re in the right place.
+          </p>
+          <div className="contact-note">
+            <HeartHandshake size={27} strokeWidth={1.3} />
+            <div>
+              <h3>Let’s imagine the possibilities.</h3>
+              <p>
+                From curious families to people caring for historic places,
+                there’s a part for everyone.
+              </p>
+            </div>
+          </div>
+          <figure className="contact-brand">
+            <img
+              src="/images/brand-reference.png"
+              alt="StoryLens Technologies logo with a castle landscape"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+        <div className="form-panel" id="contact-form">
+          <h2>Tell us your story.</h2>
+          <p className="form-intro">We’d love to know what you have in mind.</p>
+          <div className="demo-notice">
+            <Monitor size={18} />
+            <p>
+              <strong>A little preview.</strong> This is a demo form. Your
+              message won’t be sent or saved.
+            </p>
+          </div>
+          <form ref={form} noValidate onSubmit={submit}>
+            <div className="form-row">
+              <div className="field">
+                <label htmlFor="name">
+                  Your name <span>*</span>
+                </label>
+                <input
+                  {...props("name")}
+                  autoComplete="name"
+                  required
+                  placeholder="Alex Morgan"
+                  maxLength={100}
+                />
+                {error("name")}
+              </div>
+              <div className="field">
+                <label htmlFor="email">
+                  Email address <span>*</span>
+                </label>
+                <input
+                  {...props("email")}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="alex@example.com"
+                  maxLength={254}
+                />
+                {error("email")}
+              </div>
+            </div>
+            <div className="field">
+              <label htmlFor="castle">
+                Castle or organisation{" "}
+                <span className="optional">(optional)</span>
+              </label>
+              <input
+                {...props("castle")}
+                autoComplete="organization"
+                placeholder="The place you call your own"
+                maxLength={150}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="topic">
+                What brings you here? <span>*</span>
+              </label>
+              <select {...props("topic")} required>
+                <option value="">Choose a topic</option>
+                <option>Castle partnership</option>
+                <option>Family visit</option>
+                <option>Other</option>
+              </select>
+              {error("topic")}
+            </div>
+            <div className="field">
+              <label htmlFor="message">
+                Your message <span>*</span>
+              </label>
+              <textarea
+                {...props("message")}
+                required
+                rows={5}
+                placeholder="A little about your castle, your idea or your question…"
+                maxLength={5000}
+              />
+              {error("message")}
+            </div>
+            <p className="required-note">* Required fields</p>
+            <button className="button submit-button" type="submit">
+              Try the demo form <ArrowUpRight size={18} />
+            </button>
+            <div aria-live="polite" aria-atomic="true">
+              {submitted && (
+                <p className="form-success" role="status">
+                  <Check size={20} /> Demo complete — your message has not been
+                  sent.
+                </p>
+              )}
+            </div>
+          </form>
+        </div>
+      </section>
+    </Layout>
+  );
+}
+function LegacyExperience() {
+  const { hash } = useLocation();
+  const allowed = ["#magic-lens", "#ar-glasses", "#how-it-works"];
+  return (
+    <Navigate
+      replace
+      to={`/${allowed.includes(hash) ? hash : "#how-it-works"}`}
+    />
+  );
+}
+function NotFound() {
+  return (
+    <Layout title="Page not found">
+      <section className="page-intro container" id="top">
+        <Eyebrow>A little detour</Eyebrow>
+        <h1>
+          This chapter
+          <br />
+          <em>isn’t here.</em>
+        </h1>
+        <p>Let’s get you back to the adventure.</p>
+        <Button to="/#top">Back to overview</Button>
+      </section>
+    </Layout>
+  );
+}
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/stories" element={<Stories />} />
+      <Route path="/prices" element={<Prices />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/experience" element={<LegacyExperience />} />
+      <Route path="/partners" element={<Navigate replace to={partnerLink} />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
