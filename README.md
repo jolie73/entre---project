@@ -4,7 +4,7 @@
 
 English, responsive four-page concept website for family AR adventures at castles. Cream (#F8F6EF), forest green (#0A3327), muted gold (#B58731), serif headlines and restrained editorial layouts follow the supplied storylens_tam_sam_som presentation. Imagery comes from the user's StoryLense Pitch; castle illustrations are concept imagery, not evidence of a partnership.
 
-1. **Overview `/`**: product introduction, three-step experience, family roles, story preview, video placeholder and FAQ.
+1. **Overview `/`**: product introduction, three-step experience, family roles, story preview, supplied concept introduction video with native playback controls and FAQ.
 2. **Our stories `/stories`**: The Siege of Eltz, 1331, with six stations; clearly identified as a concept chapter.
 3. **Prices `/prices`**: a castle-facing pay-for-performance partnership. StoryLens receives 80% of the StoryLens surcharge; the castle keeps 20% plus its regular admission revenue. No detailed calculations, revenue calculator, family device pricing or invented plan tiers. The main section presents six included services: bespoke story, game design, AR production, devices and fleet operation, on-site setup/training, and ongoing support/maintenance. No unconfirmed claims about setup fees, subscriptions, cancellation, tax or settlement terms.
 4. **Contact us `/contact`**: validated demonstration form; no real delivery or persistent storage. Castle inquiries from Prices preselect the partnership topic. A successful demo explicitly says no message was sent.

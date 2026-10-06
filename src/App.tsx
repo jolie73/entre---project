@@ -98,7 +98,16 @@ const stations = [
   ],
 ];
 
-function Brand() {
+function Brand({ original = false }: { original?: boolean }) {
+  if (original) {
+    return (
+      <Link className="brand original-brand" to="/#top" aria-label="StoryLens home">
+        <span className="logo-window">
+          <img src="/images/storylens-banner-logo.png" alt="StoryLens Technologies" />
+        </span>
+      </Link>
+    );
+  }
   return (
     <Link className="brand" to="/#top" aria-label="StoryLens home">
       <span className="brand-symbol" aria-hidden="true">
@@ -145,7 +154,7 @@ function Header() {
   return (
     <header className="header">
       <div className="header-inner">
-        <Brand />
+        <Brand original />
         <button
           ref={toggle}
           className="menu-toggle"
@@ -345,6 +354,30 @@ function Home() {
           </span>
         </figure>
       </section>
+      <section className="film-section container film-direct" id="introduction">
+        <div>
+          <Eyebrow>A glimpse inside</Eyebrow>
+          <h2>
+            Picture the
+            <br />
+            <em>possibilities.</em>
+          </h2>
+          <p>
+            Discover the StoryLens concept and how a castle visit can become a
+            shared family adventure.
+          </p>
+        </div>
+        <video
+          className="concept-video"
+          controls
+          playsInline
+          preload="metadata"
+          aria-label="Introduction to the StoryLens concept"
+        >
+          <source src="/video/storylens-introduction.mp4" type="video/mp4" />
+          Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
+        </video>
+      </section>
       <div className="promise-strip">
         <div className="container">
           <span>
@@ -458,35 +491,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="section container story-teaser">
-        <div>
-          <Eyebrow>The first chapter</Eyebrow>
-          <h2>
-            The Siege
-            <br />
-            of Eltz, <em>1331.</em>
-          </h2>
-          <p>
-            Six stations. One castle under threat. A family with a part to play
-            in its story.
-          </p>
-          <Link className="text-link" to="/stories#chapter">
-            Step into the chapter <ArrowUpRight size={18} />
-          </Link>
-          <span className="concept-label">CONCEPT CHAPTER · BURG ELTZ</span>
-        </div>
-        <figure>
-          <img
-            src="/images/eltz-route.jpg"
-            alt="Imagined story route around a medieval castle"
-            loading="lazy"
-          />
-          <figcaption>
-            Concept illustration · Not a confirmed partnership
-          </figcaption>
-        </figure>
-      </section>
-      <section className="film-section container">
+      <section className="film-section film-section-late container" id="introduction">
         <div>
           <Eyebrow>A glimpse inside</Eyebrow>
           <h2>
@@ -495,20 +500,20 @@ function Home() {
             <em>possibilities.</em>
           </h2>
           <p>
-            Our story is taking shape. A closer look at the experience is on its
-            way.
+            Discover the StoryLens concept and how a castle visit can become
+            a shared family adventure.
           </p>
         </div>
-        <div
-          className="film-placeholder"
-          role="img"
-          aria-label="StoryLens film coming soon"
+        <video
+          className="concept-video"
+          controls
+          playsInline
+          preload="metadata"
+          aria-label="Introduction to the StoryLens concept"
         >
-          <span className="film-star">✦</span>
-          <span>A NEW WAY TO VISIT THE PAST</span>
-          <strong>Every place has a story.</strong>
-          <span className="film-status">Film coming soon</span>
-        </div>
+          <source src="/video/storylens-introduction.mp4" type="video/mp4" />
+          Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
+        </video>
       </section>
       <section className="section container faq-section">
         <div>
@@ -545,109 +550,48 @@ function Home() {
   );
 }
 
+const castles = [
+  { name: "Burg Eltz", location: "Wierschem · Germany", address: "Burg Eltz 1, 56294 Wierschem", image: "/images/eltz-route.jpg", age: "6+", stories: ["The Siege of Eltz", "The Rose of Silence", "The Last Torch"] },
+  { name: "Marksburg", location: "Braubach · Germany", address: "Marksburg 1, 56338 Braubach", image: "/images/burg-altdahn.jpeg", age: "8+", stories: ["The Hidden Gate", "The Keeper’s Secret", "The Night Watch"] },
+  { name: "Schloss Heidelberg", location: "Heidelberg · Germany", address: "Schlosshof 1, 69117 Heidelberg", image: "/images/heidelberg.jpeg", age: "10+", stories: ["The Lost Heirloom", "The Silent Courtyard", "The Crown’s Riddle"] },
+];
+const levels = ["Easy", "Medium", "Difficult"];
+
 function Stories() {
   return (
     <Layout title="Our stories">
       <section className="page-intro container" id="top">
         <Eyebrow>Our stories</Eyebrow>
-        <h1>
-          Old walls.
-          <br />
-          <em>New adventures.</em>
-        </h1>
-        <p>Every castle has a story. We give your family a part in it.</p>
+        <h1>Choose your castle.<br /><em>Find your story.</em></h1>
+        <p>Three places to explore. Three stories in every castle.<br />Hover over a story to see its challenge.</p>
       </section>
-      <section className="chapter container" id="chapter">
-        <figure className="chapter-visual">
-          <img
-            src="/images/eltz-route.jpg"
-            alt="Concept illustration of the Eltz story with glowing route markers"
-          />
-          <div className="chapter-caption">
-            <span>CHAPTER 01 · CONCEPT</span>
-            <h2>
-              The Siege of Eltz,
-              <br />
-              <em>1331.</em>
-            </h2>
-            <span>
-              <MapPin size={15} /> Inspired by Burg Eltz, Germany
-            </span>
-          </div>
-          <figcaption>Concept illustration</figcaption>
-        </figure>
-        <div className="chapter-intro">
-          <p className="large-copy">
-            A quiet Sunday.
-            <br />A castle under siege.
-            <br />
-            <em>And you, right in the middle.</em>
-          </p>
-          <div>
-            <p>
-              Follow a trail through gates, courtyards and hidden details. Meet
-              the castle’s story through choices, clues and a little
-              imagination.
-            </p>
-            <p className="fineprint">
-              This is a creative concept chapter. It does not represent a
-              current partnership with Burg Eltz or an available experience.
-            </p>
-            <a className="text-link" href="#stations">
-              Explore the six stations <ArrowDown size={17} />
-            </a>
-          </div>
-        </div>
-      </section>
-      <section className="route-section section" id="stations">
+      <section className="castle-library section" id="stories-library">
         <div className="container">
-          <div className="section-heading">
-            <div>
-              <Eyebrow>The journey</Eyebrow>
-              <h2>
-                Six moments.
-                <br />
-                <em>One shared story.</em>
-              </h2>
-            </div>
-            <p>
-              Each stop invites you to look a little closer, make a choice and
-              discover what happens next.
-            </p>
-          </div>
-          <div className="station-grid">
-            {stations.map(([name, title, text], i) => (
-              <article key={name}>
-                <span className="station-number">0{i + 1}</span>
-                <div>
-                  <span className="station-place">{name}</span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
+          {castles.map((castle, castleIndex) => (
+            <section className="castle-row" key={castle.name}>
+              <div className="castle-feature">
+                <img src={castle.image} alt={`${castle.name} concept illustration`} loading="lazy" />
+                <div className="castle-info">
+                  <span className="castle-number">0{castleIndex + 1}</span>
+                  <h2>{castle.name}</h2>
+                  <p className="castle-address"><MapPin size={14} /> {castle.address}</p>
+                  <p className="castle-meta">Stories for ages {castle.age}<br />Three adventures · Easy to difficult</p>
                 </div>
-              </article>
-            ))}
-          </div>
+              </div>
+              <div className="story-cards">
+                {castle.stories.map((story, index) => (
+                  <article className="story-card" key={story}>
+                    <img src={castle.image} alt={`${castle.name} story concept illustration`} loading="lazy" />
+                    <div className="story-card-title"><span>Story {index + 1}</span><h3>{story}</h3></div>
+                    <div className="story-card-hover"><span className="story-level">{levels[index]}</span><h3>{story}</h3><p><span>Difficulty</span>{levels[index]}<br /><span>Length</span>{index === 0 ? "20–30 min" : index === 1 ? "35–45 min" : "50–60 min"}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories#story-${castleIndex}-${index}`}>Explore story <ArrowUpRight size={15} /></Link></div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </section>
-      <section className="next-story container">
-        <span aria-hidden="true">✦</span>
-        <div>
-          <Eyebrow>More stories to come</Eyebrow>
-          <h2>
-            The next chapter
-            <br />
-            <em>could be yours.</em>
-          </h2>
-          <p>
-            We imagine a collection of adventures, each rooted in the history of
-            a different place.
-          </p>
-        </div>
-        <Link className="text-link" to="/prices#services">
-          Explore the castle partnership <ArrowUpRight size={19} />
-        </Link>
-      </section>
-      <Closing partners />
+      <section className="next-story container"><span aria-hidden="true">✦</span><div><Eyebrow>More stories to come</Eyebrow><h2>The next chapter<br /><em>could be yours.</em></h2><p>We imagine a collection of adventures, each rooted in the history of a different place.</p></div><Link className="text-link" to="/prices#services">Explore the castle partnership <ArrowUpRight size={19} /></Link></section>
     </Layout>
   );
 }
@@ -907,8 +851,8 @@ function Contact() {
           </div>
           <figure className="contact-brand">
             <img
-              src="/images/brand-reference.png"
-              alt="StoryLens Technologies logo with a castle landscape"
+              src="/images/storylens-logo.png"
+              alt="StoryLens Technologies"
               loading="lazy"
             />
           </figure>
