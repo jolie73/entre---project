@@ -473,6 +473,17 @@ const castles = [
   { name: "Schloss Heidelberg", location: "Heidelberg · Germany", address: "Schlosshof 1, 69117 Heidelberg", image: "/images/heidelberg.jpeg", age: "10+", stories: ["The Lost Heirloom", "The Silent Courtyard", "The Crown’s Riddle"] },
 ];
 const levels = ["Easy", "Medium", "Difficult"];
+const storyCoverImages: Record<string, string> = {
+  "the-siege-of-eltz": "/images/story-siege-of-eltz.png",
+  "the-rose-of-silence": "/images/story-rose-of-silence.png",
+  "the-last-torch": "/images/story-last-torch.png",
+  "the-hidden-gate": "/images/story-hidden-gate.png",
+  "the-keepers-secret": "/images/story-keepers-secret.png",
+  "the-night-watch": "/images/story-night-watch.png",
+  "the-lost-heirloom": "/images/story-lost-heirloom.png",
+  "the-silent-courtyard": "/images/story-silent-courtyard.png",
+  "the-crowns-riddle": "/images/story-crowns-riddle.png",
+};
 const storySummaries: Record<string, { tagline: string; synopsis: string[] }> = {
   "the-siege-of-eltz": {
     tagline: "The gates are closing. Your family has one chance to change the course of the siege.",
@@ -571,7 +582,7 @@ function Stories() {
               <div className="story-cards">
                 {castle.stories.map((story, index) => (
                   <article className="story-card" key={story}>
-                    <img src={castle.image} alt={`${castle.name} story concept illustration`} loading="lazy" />
+                    <img src={storyCoverImages[slugify(story)] ?? castle.image} alt={`${story} at ${castle.name}`} loading="lazy" />
                     <div className="story-card-title"><span>Story {index + 1}</span><h3>{story}</h3></div>
                     <div className="story-card-hover"><span className="story-level">{levels[index]}</span><h3>{story}</h3><p><span>Difficulty</span>{levels[index]}<br /><span>Length</span>{index === 0 ? "20–30 min" : index === 1 ? "35–45 min" : "50–60 min"}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories/${slugify(castle.name)}/${slugify(story)}#top`}>Explore story <ArrowUpRight size={15} /></Link></div>
                   </article>
@@ -593,6 +604,7 @@ function StoryDetail() {
   const storyIndex = castle?.stories.findIndex((story) => slugify(story) === storySlug) ?? -1;
   const story = storyIndex >= 0 ? castle?.stories[storyIndex] : undefined;
   const summary = storySlug ? storySummaries[storySlug] : undefined;
+  const coverImage = storySlug ? storyCoverImages[storySlug] : undefined;
   const slideLabels = ["The setting", "A moment from the story", "The family adventure"];
 
   useEffect(() => setActiveSlide(0), [castleSlug, storySlug]);
@@ -632,12 +644,16 @@ function StoryDetail() {
               <div className="story-gallery-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
                 {slideLabels.map((label, index) => (
                   <figure className={`story-gallery-slide story-gallery-slide-${index + 1}`} key={label} aria-hidden={activeSlide !== index}>
-                    <div className="story-image-placeholder">
-                      <Sparkles size={30} strokeWidth={1.2} />
-                      <span>Image placeholder {String(index + 1).padStart(2, "0")}</span>
-                      <strong>{label}</strong>
-                      <small>{castle.name} · {story}</small>
-                    </div>
+                    {index === 0 && coverImage ? (
+                      <img src={coverImage} alt={`${story} cover illustration at ${castle.name}`} />
+                    ) : (
+                      <div className="story-image-placeholder">
+                        <Sparkles size={30} strokeWidth={1.2} />
+                        <span>Image placeholder {String(index + 1).padStart(2, "0")}</span>
+                        <strong>{label}</strong>
+                        <small>{castle.name} · {story}</small>
+                      </div>
+                    )}
                   </figure>
                 ))}
               </div>
