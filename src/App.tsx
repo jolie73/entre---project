@@ -484,6 +484,59 @@ const storyCoverImages: Record<string, string> = {
   "the-silent-courtyard": "/images/story-silent-courtyard.png",
   "the-crowns-riddle": "/images/story-crowns-riddle.png",
 };
+const storyGalleryImages: Record<string, string[]> = {
+  "the-siege-of-eltz": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-rose-of-silence": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-last-torch": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-hidden-gate": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-keepers-secret": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-night-watch": [
+    "/images/story-rest-moonlight.png",
+    "/images/story-rest-night-watch.png",
+    "/images/story-rest-grimoire.png",
+  ],
+  "the-lost-heirloom": [
+    "/images/story-crowns-riddle-2.png",
+    "/images/story-crowns-riddle-3.png",
+    "/images/story-lost-heirloom-2.png",
+    "/images/story-silent-courtyard-2.png",
+    "/images/story-silent-courtyard-3.png",
+  ],
+  "the-silent-courtyard": [
+    "/images/story-crowns-riddle-2.png",
+    "/images/story-crowns-riddle-3.png",
+    "/images/story-lost-heirloom-2.png",
+    "/images/story-silent-courtyard-2.png",
+    "/images/story-silent-courtyard-3.png",
+  ],
+  "the-crowns-riddle": [
+    "/images/story-crowns-riddle-2.png",
+    "/images/story-crowns-riddle-3.png",
+    "/images/story-lost-heirloom-2.png",
+    "/images/story-silent-courtyard-2.png",
+    "/images/story-silent-courtyard-3.png",
+  ],
+};
 const storySummaries: Record<string, { tagline: string; synopsis: string[] }> = {
   "the-siege-of-eltz": {
     tagline: "The gates are closing. Your family has one chance to change the course of the siege.",
@@ -605,7 +658,15 @@ function StoryDetail() {
   const story = storyIndex >= 0 ? castle?.stories[storyIndex] : undefined;
   const summary = storySlug ? storySummaries[storySlug] : undefined;
   const coverImage = storySlug ? storyCoverImages[storySlug] : undefined;
-  const slideLabels = ["The setting", "A moment from the story", "The family adventure"];
+  const detailImages = storySlug ? storyGalleryImages[storySlug] ?? [] : [];
+  const slideLabels = [
+    "The setting",
+    "A moment from the story",
+    "The family adventure",
+    "A hidden clue",
+    "The next discovery",
+    "The final chapter",
+  ].slice(0, detailImages.length + 1);
 
   useEffect(() => setActiveSlide(0), [castleSlug, storySlug]);
 
@@ -644,8 +705,8 @@ function StoryDetail() {
               <div className="story-gallery-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
                 {slideLabels.map((label, index) => (
                   <figure className={`story-gallery-slide story-gallery-slide-${index + 1}`} key={label} aria-hidden={activeSlide !== index}>
-                    {index === 0 && coverImage ? (
-                      <img src={coverImage} alt={`${story} cover illustration at ${castle.name}`} />
+                    {(index === 0 ? coverImage : detailImages[index - 1]) ? (
+                      <img src={(index === 0 ? coverImage : detailImages[index - 1])} alt={`${story} scene ${index + 1} at ${castle.name}`} />
                     ) : (
                       <div className="story-image-placeholder">
                         <Sparkles size={30} strokeWidth={1.2} />
