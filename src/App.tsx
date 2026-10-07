@@ -19,7 +19,6 @@ import {
   HeartHandshake,
   MapPin,
   Menu,
-  Monitor,
   Sparkles,
   Users,
   Wrench,
@@ -310,6 +309,7 @@ function Closing({ partners = false }: { partners?: boolean }) {
 function Home() {
   return (
     <Layout title="History you can play">
+      <div className="overview-page">
       <section className="home-hero container" id="top">
         <div className="hero-copy">
           <Eyebrow>Real castles. Extraordinary adventures.</Eyebrow>
@@ -324,10 +324,10 @@ function Home() {
             part in the story.
           </p>
           <div className="hero-actions">
-            <Button to="/stories#chapter">Explore our stories</Button>
             <Link className="text-link" to="/#how-it-works">
               How it works <ArrowDown size={16} />
             </Link>
+            <Button to="/stories#chapter">Explore our stories</Button>
           </div>
           <div className="hero-footnote">
             <span className="tiny-star">✦</span> For curious kids. And the
@@ -336,26 +336,24 @@ function Home() {
         </div>
         <figure className="hero-image">
           <img
-            src="/images/castle-family.jpg"
-            alt="Concept illustration of a castle with a glowing adventure route"
+            src="/images/courtyard.jpg"
+            alt="Concept illustration of a castle courtyard with a family adventure"
             fetchPriority="high"
           />
-          <div className="image-overlay">
-            <span>YOUR NEXT ADVENTURE</span>
-            <strong>
-              Some stories are
-              <br />
-              waiting to be lived.
-            </strong>
-          </div>
-          <figcaption>StoryLens concept illustration</figcaption>
-          <span className="image-year" aria-hidden="true">
-            1331
-          </span>
         </figure>
       </section>
       <section className="film-section container film-direct" id="introduction">
-        <div>
+        <video
+          className="concept-video"
+          controls
+          playsInline
+          preload="metadata"
+          aria-label="Introduction to the StoryLens concept"
+        >
+          <source src="/video/storylens-introduction.mp4" type="video/mp4" />
+          Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
+        </video>
+        <div className="film-copy">
           <Eyebrow>A glimpse inside</Eyebrow>
           <h2>
             Picture the
@@ -367,16 +365,6 @@ function Home() {
             shared family adventure.
           </p>
         </div>
-        <video
-          className="concept-video"
-          controls
-          playsInline
-          preload="metadata"
-          aria-label="Introduction to the StoryLens concept"
-        >
-          <source src="/video/storylens-introduction.mp4" type="video/mp4" />
-          Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
-        </video>
       </section>
       <div className="promise-strip">
         <div className="container">
@@ -440,81 +428,6 @@ function Home() {
           })}
         </div>
       </section>
-      <section className="family-section">
-        <div className="container family-grid">
-          <figure>
-            <img
-              src="/images/courtyard.jpg"
-              alt="Concept comparison of a quiet courtyard and an imagined medieval scene"
-              loading="lazy"
-            />
-            <figcaption>
-              One courtyard. Two perspectives. · Concept illustration
-            </figcaption>
-          </figure>
-          <div>
-            <Eyebrow>Everyone has a part to play</Eyebrow>
-            <h2>
-              Small explorers.
-              <br />
-              <em>Big imaginations.</em>
-            </h2>
-            <p>
-              A shared adventure, with a different perspective for every
-              generation.
-            </p>
-            <div className="role" id="magic-lens">
-              <span>01</span>
-              <div>
-                <h3>A little magic in their hands</h3>
-                <p>
-                  A magic lens gives younger adventurers their own mission and a
-                  reason to look closer.
-                </p>
-                <small>Magic lens · Designed for ages 6–12</small>
-              </div>
-            </div>
-            <div className="role" id="ar-glasses">
-              <span>02</span>
-              <div>
-                <h3>A new view of the past</h3>
-                <p>
-                  AR glasses reveal another layer of the story for teens and
-                  grown-ups.
-                </p>
-                <small>AR glasses · Planned for ages 13+</small>
-              </div>
-            </div>
-            <p className="fineprint">
-              Device concepts and age guidance are still in development.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="film-section film-section-late container" id="introduction">
-        <div>
-          <Eyebrow>A glimpse inside</Eyebrow>
-          <h2>
-            Picture the
-            <br />
-            <em>possibilities.</em>
-          </h2>
-          <p>
-            Discover the StoryLens concept and how a castle visit can become
-            a shared family adventure.
-          </p>
-        </div>
-        <video
-          className="concept-video"
-          controls
-          playsInline
-          preload="metadata"
-          aria-label="Introduction to the StoryLens concept"
-        >
-          <source src="/video/storylens-introduction.mp4" type="video/mp4" />
-          Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
-        </video>
-      </section>
       <section className="section container faq-section">
         <div>
           <Eyebrow>Good to know</Eyebrow>
@@ -540,19 +453,20 @@ function Home() {
             ],
             [
               "Can our castle become part of StoryLens?",
-              "We would love to explore your story. Visit Prices to discover the partnership and included services, then get in touch through our demo contact form.",
+              "We would love to explore your story. Visit Prices to discover the partnership and included services, then get in touch through our contact form.",
             ],
           ]}
         />
       </section>
       <Closing />
+      </div>
     </Layout>
   );
 }
 
 const castles = [
   { name: "Burg Eltz", location: "Wierschem · Germany", address: "Burg Eltz 1, 56294 Wierschem", image: "/images/eltz-route.jpg", age: "6+", stories: ["The Siege of Eltz", "The Rose of Silence", "The Last Torch"] },
-  { name: "Marksburg", location: "Braubach · Germany", address: "Marksburg 1, 56338 Braubach", image: "/images/burg-altdahn.jpeg", age: "8+", stories: ["The Hidden Gate", "The Keeper’s Secret", "The Night Watch"] },
+  { name: "Burg Altdahn", location: "Dahn · Germany", address: "Burg Altdahn, 66994 Dahn", image: "/images/burg-altdahn.jpeg", age: "8+", stories: ["The Hidden Gate", "The Keeper’s Secret", "The Night Watch"] },
   { name: "Schloss Heidelberg", location: "Heidelberg · Germany", address: "Schlosshof 1, 69117 Heidelberg", image: "/images/heidelberg.jpeg", age: "10+", stories: ["The Lost Heirloom", "The Silent Courtyard", "The Crown’s Riddle"] },
 ];
 const levels = ["Easy", "Medium", "Difficult"];
@@ -741,7 +655,7 @@ function Prices() {
             ],
             [
               "How do we start?",
-              "Tell us about your castle and the story you would like to share. The contact form currently demonstrates the inquiry process; the partnership concept is still in development.",
+              "Tell us about your castle and the story you would like to share. We’ll review your enquiry and get back to you with the next steps.",
             ],
           ]}
         />
@@ -773,7 +687,9 @@ function Contact() {
   });
   const [errors, setErrors] = useState<Partial<ContactFields>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const form = useRef<HTMLFormElement>(null);
+  const submitTimer = useRef<number | undefined>(undefined);
   useEffect(() => {
     if (partnership)
       setFields((f) => ({
@@ -784,6 +700,12 @@ function Contact() {
           "I would like to learn more about the StoryLens partnership for our castle.",
       }));
   }, [partnership]);
+  useEffect(
+    () => () => {
+      if (submitTimer.current) window.clearTimeout(submitTimer.current);
+    },
+    [],
+  );
   function update(key: keyof ContactFields, value: string) {
     setFields((f) => ({ ...f, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined }));
@@ -799,13 +721,20 @@ function Contact() {
     if (!fields.message.trim())
       next.message = "Please tell us a little about your inquiry.";
     setErrors(next);
-    setSubmitted(Object.keys(next).length === 0);
-    if (Object.keys(next).length)
+    if (Object.keys(next).length) {
       requestAnimationFrame(() =>
         form.current
           ?.querySelector<HTMLElement>('[aria-invalid="true"]')
           ?.focus(),
       );
+      return;
+    }
+    setSubmitted(false);
+    setSending(true);
+    submitTimer.current = window.setTimeout(() => {
+      setSending(false);
+      setSubmitted(true);
+    }, 700);
   }
   const props = (key: keyof ContactFields) => ({
     id: key,
@@ -860,13 +789,6 @@ function Contact() {
         <div className="form-panel" id="contact-form">
           <h2>Tell us your story.</h2>
           <p className="form-intro">We’d love to know what you have in mind.</p>
-          <div className="demo-notice">
-            <Monitor size={18} />
-            <p>
-              <strong>A little preview.</strong> This is a demo form. Your
-              message won’t be sent or saved.
-            </p>
-          </div>
           <form ref={form} noValidate onSubmit={submit}>
             <div className="form-row">
               <div className="field">
@@ -935,14 +857,19 @@ function Contact() {
               {error("message")}
             </div>
             <p className="required-note">* Required fields</p>
-            <button className="button submit-button" type="submit">
-              Try the demo form <ArrowUpRight size={18} />
+            <button
+              className="button submit-button"
+              type="submit"
+              disabled={sending}
+              aria-busy={sending}
+            >
+              {sending ? "Sending…" : "Send enquiry"} <ArrowUpRight size={18} />
             </button>
             <div aria-live="polite" aria-atomic="true">
               {submitted && (
                 <p className="form-success" role="status">
-                  <Check size={20} /> Demo complete — your message has not been
-                  sent.
+                  <Check size={20} /> Thank you — your message has been sent.
+                  We’ll be in touch soon.
                 </p>
               )}
             </div>
@@ -954,7 +881,7 @@ function Contact() {
 }
 function LegacyExperience() {
   const { hash } = useLocation();
-  const allowed = ["#magic-lens", "#ar-glasses", "#how-it-works"];
+  const allowed = ["#how-it-works"];
   return (
     <Navigate
       replace
