@@ -7,9 +7,12 @@ import {
   Route,
   Routes,
   useLocation,
+  useParams,
 } from "react-router-dom";
 import {
   ArrowDown,
+  ArrowLeft,
+  ArrowRight,
   ArrowUpRight,
   BookOpen,
   Check,
@@ -470,6 +473,79 @@ const castles = [
   { name: "Schloss Heidelberg", location: "Heidelberg · Germany", address: "Schlosshof 1, 69117 Heidelberg", image: "/images/heidelberg.jpeg", age: "10+", stories: ["The Lost Heirloom", "The Silent Courtyard", "The Crown’s Riddle"] },
 ];
 const levels = ["Easy", "Medium", "Difficult"];
+const storySummaries: Record<string, { tagline: string; synopsis: string[] }> = {
+  "the-siege-of-eltz": {
+    tagline: "The gates are closing. Your family has one chance to change the course of the siege.",
+    synopsis: [
+      "Burg Eltz, 1331. Rival forces are gathering beyond the walls, supplies are running low and an urgent message must reach the right hands before nightfall.",
+      "Each family member receives a different role in the castle’s defence. Together, you uncover clues, make difficult choices and decide whom to trust as the siege draws closer.",
+    ],
+  },
+  "the-rose-of-silence": {
+    tagline: "A forgotten emblem points to a promise that was never meant to be found.",
+    synopsis: [
+      "A carved rose appears in rooms across Burg Eltz, but no one agrees on what it means. Following its trail reveals fragments of a story the castle has kept quiet for generations.",
+      "Your family must connect symbols, whispered accounts and hidden objects to discover why the Rose of Silence disappeared from the records.",
+    ],
+  },
+  "the-last-torch": {
+    tagline: "When the final beacon goes dark, the castle’s fate rests with you.",
+    synopsis: [
+      "A storm has extinguished the warning fires around Burg Eltz. With riders approaching through the valley, the last torch must reach the highest tower in time.",
+      "This demanding adventure combines navigation, observation and shared decisions as your family searches for a safe route through the darkened castle.",
+    ],
+  },
+  "the-hidden-gate": {
+    tagline: "An unfinished map suggests that Burg Altdahn has one entrance no visitor has seen.",
+    synopsis: [
+      "A newly discovered map contains three missing pieces and a route that appears to pass straight through the rock beneath Burg Altdahn.",
+      "Search the ruins for landmarks, decode the mapmaker’s symbols and work together to reveal where the hidden gate once stood.",
+    ],
+  },
+  "the-keepers-secret": {
+    tagline: "The keys are accounted for, yet one locked chamber has opened by itself.",
+    synopsis: [
+      "The castle keeper’s records contain a strange gap: one room, one key and one name have been carefully removed from the story of Burg Altdahn.",
+      "By comparing clues from different parts of the ruins, your family can reconstruct the missing account and decide whether the keeper protected the castle—or betrayed it.",
+    ],
+  },
+  "the-night-watch": {
+    tagline: "Three signal fires. One unknown visitor. No room for a wrong decision.",
+    synopsis: [
+      "As darkness settles over Burg Altdahn, an unfamiliar signal appears in the hills. The night watch cannot tell whether it announces an ally or an attack.",
+      "Take charge of the watch, interpret changing signals and coordinate your family’s choices before the visitor reaches the outer wall.",
+    ],
+  },
+  "the-lost-heirloom": {
+    tagline: "A celebration is about to begin, but the object at its heart has vanished.",
+    synopsis: [
+      "On the morning of an important celebration at Schloss Heidelberg, a treasured heirloom disappears from the royal apartments.",
+      "Follow its path through the palace, question the evidence and combine each player’s discoveries to return it before the first guests arrive.",
+    ],
+  },
+  "the-silent-courtyard": {
+    tagline: "Every sound has disappeared from the courtyard—except one.",
+    synopsis: [
+      "A musician’s melody once filled Schloss Heidelberg, but an unexplained silence now follows the same route through the castle grounds.",
+      "Your family traces patterns in the architecture and pieces together a coded composition to learn what the silence is trying to reveal.",
+    ],
+  },
+  "the-crowns-riddle": {
+    tagline: "A royal puzzle has remained unsolved for centuries. Tonight, the final clue returns.",
+    synopsis: [
+      "A sequence of symbols hidden across Schloss Heidelberg leads to a riddle connected with the court, its scholars and an unfinished royal plan.",
+      "The most challenging StoryLens chapter asks your family to compare perspectives, test theories and agree on one final answer before the trail closes.",
+    ],
+  },
+};
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 function Stories() {
   return (
@@ -497,7 +573,7 @@ function Stories() {
                   <article className="story-card" key={story}>
                     <img src={castle.image} alt={`${castle.name} story concept illustration`} loading="lazy" />
                     <div className="story-card-title"><span>Story {index + 1}</span><h3>{story}</h3></div>
-                    <div className="story-card-hover"><span className="story-level">{levels[index]}</span><h3>{story}</h3><p><span>Difficulty</span>{levels[index]}<br /><span>Length</span>{index === 0 ? "20–30 min" : index === 1 ? "35–45 min" : "50–60 min"}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories#story-${castleIndex}-${index}`}>Explore story <ArrowUpRight size={15} /></Link></div>
+                    <div className="story-card-hover"><span className="story-level">{levels[index]}</span><h3>{story}</h3><p><span>Difficulty</span>{levels[index]}<br /><span>Length</span>{index === 0 ? "20–30 min" : index === 1 ? "35–45 min" : "50–60 min"}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories/${slugify(castle.name)}/${slugify(story)}#top`}>Explore story <ArrowUpRight size={15} /></Link></div>
                   </article>
                 ))}
               </div>
@@ -506,6 +582,87 @@ function Stories() {
         </div>
       </section>
       <section className="next-story container"><span aria-hidden="true">✦</span><div><Eyebrow>More stories to come</Eyebrow><h2>The next chapter<br /><em>could be yours.</em></h2><p>We imagine a collection of adventures, each rooted in the history of a different place.</p></div><Link className="text-link" to="/prices#services">Explore the castle partnership <ArrowUpRight size={19} /></Link></section>
+    </Layout>
+  );
+}
+
+function StoryDetail() {
+  const { castleSlug, storySlug } = useParams();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const castle = castles.find((item) => slugify(item.name) === castleSlug);
+  const storyIndex = castle?.stories.findIndex((story) => slugify(story) === storySlug) ?? -1;
+  const story = storyIndex >= 0 ? castle?.stories[storyIndex] : undefined;
+  const summary = storySlug ? storySummaries[storySlug] : undefined;
+  const slideLabels = ["The setting", "A moment from the story", "The family adventure"];
+
+  useEffect(() => setActiveSlide(0), [castleSlug, storySlug]);
+
+  if (!castle || !story || !summary) return <NotFound />;
+
+  const length = storyIndex === 0 ? "20–30 min" : storyIndex === 1 ? "35–45 min" : "50–60 min";
+  const showSlide = (index: number) =>
+    setActiveSlide((index + slideLabels.length) % slideLabels.length);
+
+  return (
+    <Layout title={`${story} · ${castle.name}`}>
+      <article className="story-detail" id="top">
+        <header className="story-detail-header container">
+          <Link className="story-back" to="/stories#stories-library">
+            <ArrowLeft size={16} /> All stories
+          </Link>
+          <Eyebrow>{castle.name} · Story {storyIndex + 1}</Eyebrow>
+          <h1>{story}</h1>
+          <p className="story-tagline">{summary.tagline}</p>
+          <div className="story-detail-meta" aria-label="Story information">
+            <span><small>Difficulty</small>{levels[storyIndex]}</span>
+            <span><small>Length</small>{length}</span>
+            <span><small>Recommended age</small>{castle.age}</span>
+          </div>
+        </header>
+
+        <section className="story-detail-body container">
+          <div className="story-synopsis">
+            <Eyebrow>Story synopsis</Eyebrow>
+            <h2>Step into the<br /><em>adventure.</em></h2>
+            {summary.synopsis.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+
+          <div className="story-gallery" aria-roledescription="carousel" aria-label={`${story} image gallery`}>
+            <div className="story-gallery-viewport">
+              <div className="story-gallery-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
+                {slideLabels.map((label, index) => (
+                  <figure className={`story-gallery-slide story-gallery-slide-${index + 1}`} key={label} aria-hidden={activeSlide !== index}>
+                    <div className="story-image-placeholder">
+                      <Sparkles size={30} strokeWidth={1.2} />
+                      <span>Image placeholder {String(index + 1).padStart(2, "0")}</span>
+                      <strong>{label}</strong>
+                      <small>{castle.name} · {story}</small>
+                    </div>
+                  </figure>
+                ))}
+              </div>
+            </div>
+            <div className="story-gallery-controls">
+              <button type="button" onClick={() => showSlide(activeSlide - 1)} aria-label="Previous image"><ArrowLeft size={18} /></button>
+              <div className="story-gallery-dots" aria-label="Choose image">
+                {slideLabels.map((label, index) => (
+                  <button type="button" key={label} className={activeSlide === index ? "active" : ""} onClick={() => showSlide(index)} aria-label={`Show image ${index + 1}`} aria-current={activeSlide === index ? "true" : undefined} />
+                ))}
+              </div>
+              <span>{String(activeSlide + 1).padStart(2, "0")} / {String(slideLabels.length).padStart(2, "0")}</span>
+              <button type="button" onClick={() => showSlide(activeSlide + 1)} aria-label="Next image"><ArrowRight size={18} /></button>
+            </div>
+          </div>
+        </section>
+
+        <section className="story-detail-cta">
+          <div className="container">
+            <Eyebrow>Ready for the next chapter?</Eyebrow>
+            <h2>Discover more stories<br /><em>at {castle.name}.</em></h2>
+            <Button to="/stories#stories-library">Explore all stories</Button>
+          </div>
+        </section>
+      </article>
     </Layout>
   );
 }
@@ -910,6 +1067,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/stories" element={<Stories />} />
+      <Route path="/stories/:castleSlug/:storySlug" element={<StoryDetail />} />
       <Route path="/prices" element={<Prices />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/experience" element={<LegacyExperience />} />

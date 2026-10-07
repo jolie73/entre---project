@@ -1865,3 +1865,175 @@ svg {
   .story-card-hover { transform: translateY(0); opacity: 0; pointer-events: none; }
   .story-card:hover .story-card-hover, .story-card:focus-within .story-card-hover { opacity: 1; pointer-events: auto; }
 }
+
+/* Individual story pages */
+.story-detail-header {
+  position: relative;
+  padding-block: 72px 64px;
+  text-align: center;
+}
+.story-detail-header .eyebrow { justify-content: center; }
+.story-detail-header h1 {
+  max-width: 900px;
+  margin-inline: auto;
+  font-size: clamp(58px, 7vw, 94px);
+}
+.story-back {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding-block: 8px;
+  border-bottom: 1px solid #b9c0b2;
+  font-size: 11px;
+  font-weight: 600;
+}
+.story-tagline {
+  max-width: 690px;
+  margin: 26px auto 34px;
+  font: 25px/1.45 var(--serif);
+  color: var(--green);
+  letter-spacing: -0.025em;
+}
+.story-detail-meta {
+  display: flex;
+  width: min(660px, 100%);
+  margin-inline: auto;
+  border-block: 1px solid var(--line);
+}
+.story-detail-meta > span {
+  flex: 1;
+  padding: 18px 24px;
+  font-size: 13px;
+}
+.story-detail-meta > span + span { border-left: 1px solid var(--line); }
+.story-detail-meta small {
+  display: block;
+  margin-bottom: 7px;
+  color: #7b867a;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.story-detail-body {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(45px, 7vw, 95px);
+  align-items: center;
+  padding-block: 70px 100px;
+}
+.story-synopsis h2 { margin-bottom: 26px; }
+.story-synopsis p { max-width: 450px; }
+.story-gallery { min-width: 0; }
+.story-gallery-viewport {
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--green);
+}
+.story-gallery-track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.story-gallery-slide {
+  flex: 0 0 100%;
+  aspect-ratio: 16 / 10;
+}
+.story-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  text-align: center;
+  color: #f7f2e6;
+  background:
+    radial-gradient(circle at 75% 25%, rgba(205, 164, 81, 0.34), transparent 26%),
+    linear-gradient(135deg, #0b392b, #254f40);
+}
+.story-gallery-slide-2 .story-image-placeholder {
+  background:
+    radial-gradient(circle at 28% 68%, rgba(224, 194, 125, 0.28), transparent 28%),
+    linear-gradient(145deg, #193c31, #6b633f);
+}
+.story-gallery-slide-3 .story-image-placeholder {
+  background:
+    radial-gradient(circle at 70% 72%, rgba(203, 153, 63, 0.32), transparent 25%),
+    linear-gradient(145deg, #563c27, #0b392b);
+}
+.story-image-placeholder svg { margin-bottom: 26px; color: #dbbc78; }
+.story-image-placeholder > span {
+  margin-bottom: 14px;
+  color: #d7c59a;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.story-image-placeholder strong {
+  font: 38px/1.15 var(--serif);
+  font-weight: 400;
+}
+.story-image-placeholder small { margin-top: 14px; color: #becbbf; font-size: 10px; }
+.story-gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 17px;
+}
+.story-gallery-controls > button {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid #bfc5b8;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--green);
+}
+.story-gallery-controls > button:hover { border-color: var(--gold); color: var(--gold); }
+.story-gallery-controls > span {
+  margin-left: auto;
+  color: #758174;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.story-gallery-dots { display: flex; gap: 8px; }
+.story-gallery-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #bdc3b7;
+}
+.story-gallery-dots button.active { background: var(--gold); }
+.story-detail-cta {
+  border-top: 1px solid var(--line);
+  padding-block: 75px 90px;
+  text-align: center;
+}
+.story-detail-cta .eyebrow { justify-content: center; }
+.story-detail-cta h2 { margin-bottom: 30px; }
+
+@media (max-width: 760px) {
+  .story-detail-header { padding-block: 68px 42px; }
+  .story-back { top: 22px; }
+  .story-detail-header h1 { font-size: 54px; }
+  .story-tagline { margin-block: 22px 28px; font-size: 21px; }
+  .story-detail-meta { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .story-detail-meta > span { padding: 15px 8px; font-size: 11px; }
+  .story-detail-body {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding-block: 45px 65px;
+  }
+  .story-gallery { grid-row: 1; }
+  .story-gallery-slide { aspect-ratio: 4 / 3; }
+  .story-image-placeholder { padding: 24px; }
+  .story-image-placeholder strong { font-size: 29px; }
+  .story-gallery-controls { gap: 10px; }
+  .story-detail-cta { padding-block: 55px 65px; }
+}
