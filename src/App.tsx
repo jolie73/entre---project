@@ -817,7 +817,7 @@ function Prices() {
             ],
             [
               "How do we start?",
-              "Tell us about your castle and the story you would like to share. We’ll review your enquiry and get back to you with the next steps.",
+              "Tell us about your castle and the story you would like to share. We’ll review your inquiry and get back to you with the next steps.",
             ],
           ]}
         />
@@ -924,28 +924,19 @@ function Contact() {
             <em>a hello.</em>
           </h1>
           <p>
-            A castle with a story to tell?
-            <br />A question about the adventure?
-            <br />
-            You’re in the right place.
+            Whether you represent a castle, the media or are simply curious
+            about StoryLens, we’d love to hear from you.
           </p>
           <div className="contact-note">
             <HeartHandshake size={27} strokeWidth={1.3} />
             <div>
-              <h3>Let’s imagine the possibilities.</h3>
+              <h3>A thoughtful start.</h3>
               <p>
-                From curious families to people caring for historic places,
-                there’s a part for everyone.
+                Tell us a little about your place, idea or question. We’ll
+                point you to the right next step.
               </p>
             </div>
           </div>
-          <figure className="contact-brand">
-            <img
-              src="/images/storylens-logo.png"
-              alt="StoryLens Technologies"
-              loading="lazy"
-            />
-          </figure>
         </div>
         <div className="form-panel" id="contact-form">
           <h2>Tell us your story.</h2>
@@ -997,9 +988,10 @@ function Contact() {
                 What brings you here? <span>*</span>
               </label>
               <select {...props("topic")} required>
-                <option value="">Choose a topic</option>
+                <option value="" disabled>Choose a topic</option>
                 <option>Castle partnership</option>
-                <option>Family visit</option>
+                <option>Media &amp; press</option>
+                <option>General inquiry</option>
                 <option>Other</option>
               </select>
               {error("topic")}
@@ -1024,7 +1016,7 @@ function Contact() {
               disabled={sending}
               aria-busy={sending}
             >
-              {sending ? "Sending…" : "Send enquiry"} <ArrowUpRight size={18} />
+              {sending ? "Sending…" : "Send inquiry"} <ArrowUpRight size={18} />
             </button>
             <div aria-live="polite" aria-atomic="true">
               {submitted && (

@@ -953,33 +953,42 @@ svg {
 .contact-layout {
   display: grid;
   grid-template-columns: 1fr 1.08fr;
-  gap: 85px;
+  gap: clamp(48px, 7vw, 85px);
   padding-block: 80px 100px;
 }
 .contact-copy h1 {
-  font-size: clamp(55px, 5.5vw, 79px);
-  margin-bottom: 30px;
+  max-width: 510px;
+  font-size: clamp(52px, 5vw, 70px);
+  margin-bottom: 24px;
 }
 .contact-copy > p:not(.eyebrow) {
+  max-width: 405px;
   font-size: 15px;
+  line-height: 1.65;
 }
 .contact-note {
   display: flex;
-  gap: 20px;
-  padding-top: 30px;
-  margin-top: 40px;
-  border-top: 1px solid #cdd1c2;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 440px;
+  padding: 22px 24px;
+  margin-top: 34px;
+  border-left: 2px solid var(--gold);
+  background: #f1eee5;
 }
 .contact-note > svg {
+  flex: 0 0 auto;
   color: #9b7a37;
 }
 .contact-note h3 {
-  font-size: 23px;
-  margin-bottom: 12px;
+  font-size: 21px;
+  margin-bottom: 8px;
 }
 .contact-note p {
+  margin: 0;
   font-size: 12px;
-  max-width: 300px;
+  line-height: 1.65;
+  max-width: 320px;
 }
 .contact-decoration {
   position: relative;
@@ -1574,11 +1583,11 @@ svg {
     gap: 35px;
   }
   .contact-copy h1 {
-    font-size: 66px;
+    font-size: 54px;
   }
   .contact-note {
-    margin-top: 25px;
-    padding-top: 25px;
+    margin-top: 26px;
+    padding: 20px;
   }
   .contact-note p {
     margin: 0;
@@ -1808,14 +1817,6 @@ svg {
 @media (max-width: 760px) {
   .logo-window { width: 135px; height: 47px; }
 }
-.contact-brand {
-  max-width: 360px;
-  margin-top: 36px;
-  mix-blend-mode: multiply;
-}
-.contact-brand img {
-  width: 100%;
-}
 .castle-library { background: var(--cream); }
 .castle-row { padding-block: 18px 70px; border-top: 1px solid #c9cdbd; }
 .castle-row:last-child { padding-bottom: 10px; }
@@ -1848,9 +1849,6 @@ svg {
 .story-card-hover p span { display: inline-block; width: 82px; color: #aebfa8; text-transform: uppercase; letter-spacing: .09em; font-size: 8px; }
 .story-card-hover .text-link { color: var(--cream); border-color: #769079; font-size: 10px; gap: 12px; padding-block: 6px; }
 @media (max-width: 760px) {
-  .contact-brand {
-    display: none;
-  }
   .castle-row { padding-bottom: 45px; }
   .castle-feature { grid-template-columns: 1fr; min-height: 0; margin-bottom: 22px; }
   .castle-feature > img { min-height: 220px; height: 220px; }
