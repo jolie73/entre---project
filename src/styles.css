@@ -2042,3 +2042,168 @@ svg {
   .story-gallery-controls { gap: 10px; }
   .story-detail-cta { padding-block: 55px 65px; }
 }
+
+/* Prices: compact partnership offer */
+.pricing-offer-intro {
+  padding-block: 72px 46px;
+  text-align: left;
+}
+.pricing-offer-intro h1 {
+  max-width: 760px;
+  margin-bottom: 23px;
+  font-size: clamp(55px, 5.9vw, 84px);
+}
+.pricing-offer-intro > p {
+  max-width: 570px;
+  margin-bottom: 0;
+  font-size: 16px;
+}
+.partnership-offer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  margin-bottom: 105px;
+  border: 1px solid #cbd0c2;
+}
+.partnership-terms,
+.partnership-includes {
+  padding: clamp(30px, 4vw, 54px);
+}
+.partnership-terms {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background: #eef0e7;
+}
+.partnership-terms h2,
+.partnership-includes h2 {
+  margin-bottom: 22px;
+  font-size: clamp(37px, 3.5vw, 51px);
+}
+.partnership-terms > p:not(.partnership-split) { max-width: 390px; }
+.partnership-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 11px;
+  margin: 14px 0 20px;
+  color: var(--green);
+  font: 21px/1.25 var(--serif);
+}
+.partnership-split span { color: var(--gold); }
+.partnership-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  color: #52695a;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.partnership-note svg { margin-top: 1px; color: var(--gold); }
+.partnership-includes { background: #fffdf8; }
+.partnership-includes ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #d9ddd2;
+}
+.partnership-includes li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid #d9ddd2;
+}
+.partnership-includes li > svg { margin-top: 3px; color: #957431; }
+.partnership-includes h3 {
+  margin-bottom: 4px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.partnership-includes li p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.partnership-journey {
+  padding-block: 0 100px;
+}
+.partnership-journey > div:first-child {
+  max-width: 620px;
+  margin-bottom: 45px;
+}
+.partnership-journey h2 {
+  margin-top: 14px;
+  font-size: clamp(38px, 4vw, 54px);
+}
+.partnership-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 46px;
+}
+.partnership-steps::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: #cbd0c2;
+}
+.partnership-steps article {
+  position: relative;
+  z-index: 1;
+  padding-top: 47px;
+}
+.partnership-steps article > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--cream);
+  font-size: 8px;
+}
+.partnership-steps h3 { margin-bottom: 10px; font-size: 24px; }
+.partnership-steps p { max-width: 310px; margin: 0; font-size: 13px; }
+.pricing-faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(40px, 7vw, 90px);
+  padding-block: 70px;
+  border-top: 1px solid var(--line);
+}
+.pricing-faq h2 { font-size: clamp(38px, 4vw, 53px); }
+@media (max-width: 760px) {
+  .pricing-offer-intro { padding-block: 48px 34px; }
+  .pricing-offer-intro h1 { font-size: 54px; }
+  .pricing-offer-intro > p { font-size: 14px; }
+  .partnership-offer { grid-template-columns: 1fr; margin-bottom: 64px; }
+  .partnership-terms,
+  .partnership-includes { padding: 30px 24px; }
+  .partnership-terms h2,
+  .partnership-includes h2 { font-size: 38px; }
+  .partnership-terms .button { width: 100%; }
+  .partnership-journey { padding-bottom: 64px; }
+  .partnership-journey > div:first-child { margin-bottom: 34px; }
+  .partnership-steps { grid-template-columns: 1fr; gap: 26px; }
+  .partnership-steps::before {
+    top: 15px;
+    bottom: 15px;
+    left: 15px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .partnership-steps article { padding: 4px 0 4px 55px; }
+  .partnership-steps h3 { font-size: 23px; }
+  .partnership-steps p { font-size: 13px; }
+  .pricing-faq { grid-template-columns: 1fr; gap: 30px; padding-block: 50px; }
+}

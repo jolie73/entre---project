@@ -14,7 +14,6 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
-  BookOpen,
   Check,
   ChevronDown,
   Compass,
@@ -24,7 +23,6 @@ import {
   Menu,
   Sparkles,
   Users,
-  Wrench,
   X,
 } from "lucide-react";
 
@@ -35,38 +33,6 @@ const nav = [
   ["Contact us", "/contact"],
 ];
 const partnerLink = "/contact?topic=partnership#contact-form";
-const services = [
-  {
-    icon: BookOpen,
-    title: "A story that belongs to your castle",
-    text: "A bespoke chapter inspired by your people, places and history, developed with your team and historical expertise.",
-  },
-  {
-    icon: Compass,
-    title: "An adventure made to be shared",
-    text: "Interactive challenges, meaningful roles and a route that turns a family visit into a story everyone helps to tell.",
-  },
-  {
-    icon: Sparkles,
-    title: "History, brought into view",
-    text: "Production and technical implementation of the AR scenes that add a new layer to your real surroundings.",
-  },
-  {
-    icon: Glasses,
-    title: "The tools to step inside",
-    text: "Magic lenses and AR glasses, with device provision and fleet operation included in the partnership.",
-  },
-  {
-    icon: Users,
-    title: "A team ready for the first chapter",
-    text: "On-site setup and staff training, so your team can confidently welcome visitors into the experience.",
-  },
-  {
-    icon: Wrench,
-    title: "Support beyond opening day",
-    text: "Ongoing technical support and maintenance to keep the experience ready for the next adventure.",
-  },
-];
 const stations = [
   [
     "The castle gate",
@@ -745,132 +711,98 @@ function StoryDetail() {
 }
 
 function Prices() {
+  const includedServices = [
+    ["Bespoke story development", "A chapter shaped around your castle, its people and its history."],
+    ["Game design and interactive challenges", "Shared missions and decisions that invite families to explore together."],
+    ["AR content and technical implementation", "Digital story layers produced for the real rooms, routes and surroundings."],
+    ["Devices and fleet operation", "Magic lenses and AR glasses, with practical device provision included."],
+    ["On-site setup and staff training", "A prepared visitor journey and a team ready to welcome the first families."],
+    ["Ongoing support and maintenance", "Technical support that keeps the experience ready for every next visit."],
+  ];
   return (
     <Layout title="Prices & partnership">
-      <section className="page-intro pricing-intro container" id="top">
+      <section className="pricing-offer-intro container" id="top">
         <Eyebrow>For castles & historic places</Eyebrow>
         <h1>
-          We grow
+          One partnership.
           <br />
-          <em>when you grow.</em>
+          <em>Everything included.</em>
         </h1>
         <p>
-          A partnership built on shared success.
-          <br />
-          Bring your history to life, and share in every story played.
+          Bring your castle’s stories to life with an experience created,
+          equipped and supported by StoryLens.
         </p>
-        <Button to={partnerLink}>Discuss your castle</Button>
       </section>
-      <section className="pricing-model container" id="partnership">
-        <div className="pricing-model-copy">
+      <section className="partnership-offer container" id="partnership">
+        <div className="partnership-terms">
           <Eyebrow>Pay for performance</Eyebrow>
           <h2>
-            One experience.
+            Shared rewards.
             <br />
-            <em>Shared rewards.</em>
+            <em>A clear partnership.</em>
           </h2>
           <p>
-            Our fee is tied to the StoryLens add-on revenue your castle earns.
-            You keep your regular admission revenue in full, plus your share of
-            each StoryLens add-on.
+            Our fee is tied to the additional StoryLens revenue your castle
+            earns. There is one shared model, designed around the experience
+            we create together.
           </p>
-          <div className="admission-note">
+          <p className="partnership-split">
+            <strong>80% StoryLens</strong>
+            <span aria-hidden="true">·</span>
+            <strong>20% your castle</strong>
+          </p>
+          <div className="partnership-note">
             <Check size={18} />
-            <span>Your regular admission revenue stays with you.</span>
+            <span>Your regular admission revenue stays entirely with you.</span>
           </div>
+          <Button to={partnerLink}>Discuss your castle</Button>
         </div>
-        <div className="split-panel">
-          <div className="split-heading">
-            <span>THE STORYLENS ADD-ON</span>
-            <span aria-hidden="true">✦</span>
-          </div>
-          <div className="split-numbers">
-            <div>
-              <strong>
-                80<span>%</span>
-              </strong>
-              <h3>StoryLens</h3>
-              <p>
-                Creating and delivering
-                <br />
-                the experience
-              </p>
-            </div>
-            <div>
-              <strong>
-                20<span>%</span>
-              </strong>
-              <h3>Your castle</h3>
-              <p>
-                Your share of every
-                <br />
-                StoryLens add-on
-              </p>
-            </div>
-          </div>
-          <div className="split-bar" aria-hidden="true">
-            <span />
-            <span />
-          </div>
-          <p className="split-note">
-            The split applies to the StoryLens surcharge only.
-          </p>
-        </div>
-      </section>
-      <section className="section services-section" id="services">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <Eyebrow>Our services · Included in the partnership</Eyebrow>
-              <h2>
-                Your history.
-                <br />
-                <em>Our craft.</em>
-              </h2>
-            </div>
-            <p>
-              Everything your castle needs to bring history to life. From the
-              first idea to the next family through your gates.
-            </p>
-          </div>
-          <div className="services-grid">
-            {services.map(({ icon: Icon, title, text }, i) => (
-              <article key={title}>
-                <div className="service-icon">
-                  <Icon size={26} strokeWidth={1.35} />
-                  <span>0{i + 1}</span>
+        <div className="partnership-includes" id="services">
+          <Eyebrow>What’s included</Eyebrow>
+          <h2>From idea<br /><em>to opening day.</em></h2>
+          <ul>
+            {includedServices.map(([title, text]) => (
+              <li key={title}>
+                <Check size={16} strokeWidth={1.8} />
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
                 </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-                <span className="included">
-                  <Check size={13} /> Included
-                </span>
-              </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
-      <section className="section container partnership-process">
+      <section className="partnership-journey container">
         <div>
-          <Eyebrow>Made together</Eyebrow>
+          <Eyebrow>How we start</Eyebrow>
           <h2>
-            We bring the experience.
+            A simple path.
             <br />
-            <em>You bring the place.</em>
+            <em>Built together.</em>
           </h2>
         </div>
-        <p>
-          Your team knows the castle best. We work with that knowledge to shape
-          a chapter that belongs to your site, your history and your visitors.
-        </p>
+        <div className="partnership-steps">
+          {[
+            ["01", "Discuss your castle", "Share the place, the people and the story you would like families to discover."],
+            ["02", "Shape the experience", "We turn that knowledge into a StoryLens chapter with your team."],
+            ["03", "Prepare for launch", "Set up the experience and prepare your team to welcome visitors."],
+          ].map(([number, title, text]) => (
+            <article key={number}>
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
       </section>
-      <section className="faq-section container pricing-faq">
+      <section className="pricing-faq container">
         <div>
-          <Eyebrow>A clear partnership</Eyebrow>
+          <Eyebrow>Good to know</Eyebrow>
           <h2>
-            Good questions.
+            Clear answers.
             <br />
-            <em>Simple answers.</em>
+            <em>Before we begin.</em>
           </h2>
         </div>
         <Faq
@@ -878,10 +810,6 @@ function Prices() {
             [
               "What does the 80/20 split apply to?",
               "Only the additional StoryLens surcharge. StoryLens receives 80% and your castle keeps 20%. Your regular admission revenue remains with your castle.",
-            ],
-            [
-              "What is included in the partnership?",
-              "The bespoke story, game development, AR production, device provision and operation, on-site setup and staff training, and ongoing technical support and maintenance.",
             ],
             [
               "Do you take a share of ordinary admission tickets?",
@@ -894,7 +822,6 @@ function Prices() {
           ]}
         />
       </section>
-      <Closing partners />
     </Layout>
   );
 }
