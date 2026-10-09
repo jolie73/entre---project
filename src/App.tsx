@@ -276,6 +276,66 @@ function Closing({ partners = false }: { partners?: boolean }) {
 }
 
 function Home() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const previewActive = useRef(false);
+  const manualPlayback = useRef(false);
+  const [fullVideo, setFullVideo] = useState(false);
+  const previousMuted = useRef(false);
+
+  const takeVideoControl = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    manualPlayback.current = true;
+    previewActive.current = false;
+    setFullVideo(true);
+    video.currentTime = 0;
+    video.muted = false;
+    void video.play().catch(() => {});
+  };
+
+  const stopPreview = () => {
+    const video = videoRef.current;
+    if (!video || !previewActive.current) return;
+    previewActive.current = false;
+    video.pause();
+    video.muted = previousMuted.current;
+  };
+
+  const startPreview = () => {
+    const video = videoRef.current;
+    if (!video || manualPlayback.current || !video.paused || previewActive.current) return;
+    previousMuted.current = video.muted;
+    previewActive.current = true;
+    video.muted = true;
+    if (video.currentTime >= 19) video.currentTime = 0;
+    void video.play().catch(() => {
+      if (previewActive.current) stopPreview();
+    });
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const headerHeight = document.querySelector(".header")?.getBoundingClientRect().height ?? 0;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.999) startPreview();
+      else stopPreview();
+    }, { threshold: [0, 0.999, 1], rootMargin: `-${headerHeight}px 0px 0px 0px` });
+    observer.observe(video);
+    const timer = window.setInterval(() => {
+      const video = videoRef.current;
+      if (video && previewActive.current && video.currentTime >= 19) {
+        video.currentTime = 0;
+      }
+    }, 50);
+    return () => {
+      observer.disconnect();
+      window.clearInterval(timer);
+      video.pause();
+      previewActive.current = false;
+    };
+  }, []);
+
   return (
     <Layout title="History you can play">
       <div className="overview-page">
@@ -312,9 +372,11 @@ function Home() {
         </figure>
       </section>
       <section className="film-section container film-direct" id="introduction">
+        <div className="concept-video" style={{ position: "relative" }}>
         <video
-          className="concept-video"
-          controls
+          ref={videoRef}
+          style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
+          controls={fullVideo}
           playsInline
           preload="metadata"
           aria-label="Introduction to the StoryLens concept"
@@ -322,6 +384,17 @@ function Home() {
           <source src="/video/storylens-introduction.mp4" type="video/mp4" />
           Your browser cannot play this video. <a href="/video/storylens-introduction.mp4">Open the concept video</a>.
         </video>
+        {!fullVideo && (
+          <button
+            type="button"
+            onClick={takeVideoControl}
+            aria-label="Play full video with sound"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0, background: "transparent", cursor: "pointer", color: "white" }}
+          >
+            <span style={{ position: "absolute", bottom: 16, left: 16, padding: "10px 16px", borderRadius: 24, background: "rgba(0, 0, 0, 0.65)" }}>▶ Play full video</span>
+          </button>
+        )}
+        </div>
         <div className="film-copy">
           <Eyebrow>A glimpse inside</Eyebrow>
           <h2>
@@ -360,29 +433,25 @@ function Home() {
               <em>With a twist.</em>
             </h2>
           </div>
-          <p>
-            The walls are real. The history is all around you. StoryLens adds
-            the adventure that brings everyone into the picture.
-          </p>
         </div>
         <div className="steps">
           {[
             [
-              Glasses,
+                Glasses,
               "Pick up your lens",
               "Choose your role and see the castle through fresh eyes.",
             ],
             [
-              Compass,
+                Compass,
               "Follow the story",
               "Explore real rooms and courtyards, finding clues along the way.",
             ],
             [
-              HeartHandshake,
+                HeartHandshake,
               "Play your part",
               "Make decisions and solve challenges together. This is your family’s chapter.",
             ],
-          ].map(([Icon, heading, text], i) => {
+            ].map(([Icon, heading, text], i) => {
             const I = Icon as typeof Glasses;
             return (
               <article key={String(heading)}>
@@ -434,11 +503,21 @@ function Home() {
 }
 
 const castles = [
-  { name: "Burg Eltz", location: "Wierschem · Germany", address: "Burg Eltz 1, 56294 Wierschem", image: "/images/eltz-route.jpg", age: "6+", stories: ["The Siege of Eltz", "The Rose of Silence", "The Last Torch"] },
+  { name: "Burg Eltz", location: "Wierschem · Germany", address: "Burg Eltz 1, 56294 Wierschem", image: "/images/eltz-route.jpg", age: "6+", stories: ["The Rose of Silence", "The Last Torch", "The Siege of Eltz"] },
   { name: "Burg Altdahn", location: "Dahn · Germany", address: "Burg Altdahn, 66994 Dahn", image: "/images/burg-altdahn.jpeg", age: "8+", stories: ["The Hidden Gate", "The Keeper’s Secret", "The Night Watch"] },
   { name: "Schloss Heidelberg", location: "Heidelberg · Germany", address: "Schlosshof 1, 69117 Heidelberg", image: "/images/heidelberg.jpeg", age: "10+", stories: ["The Lost Heirloom", "The Silent Courtyard", "The Crown’s Riddle"] },
 ];
-const levels = ["Easy", "Medium", "Difficult"];
+const storyExperience: Record<string, { difficulty: "Easy" | "Medium" | "Difficult"; length: string }> = {
+  "The Rose of Silence": { difficulty: "Easy", length: "1 hour" },
+  "The Last Torch": { difficulty: "Medium", length: "1.5 hours" },
+  "The Siege of Eltz": { difficulty: "Difficult", length: "2 hours" },
+  "The Hidden Gate": { difficulty: "Easy", length: "1 hour" },
+  "The Keeper’s Secret": { difficulty: "Medium", length: "1.5 hours" },
+  "The Night Watch": { difficulty: "Difficult", length: "2 hours" },
+  "The Lost Heirloom": { difficulty: "Easy", length: "1 hour" },
+  "The Silent Courtyard": { difficulty: "Medium", length: "1.5 hours" },
+  "The Crown’s Riddle": { difficulty: "Difficult", length: "2 hours" },
+};
 const storyCoverImages: Record<string, string> = {
   "the-siege-of-eltz": "/images/story-siege-of-eltz.png",
   "the-rose-of-silence": "/images/story-rose-of-silence.png",
@@ -583,7 +662,7 @@ function Stories() {
       <section className="page-intro container" id="top">
         <Eyebrow>Our stories</Eyebrow>
         <h1>Choose your castle.<br /><em>Find your story.</em></h1>
-        <p>Three places to explore. Three stories in every castle.<br />Hover over a story to see its challenge.</p>
+        <p>Three places to explore. Three stories in every castle.<br />Choose a story to discover its challenge.</p>
       </section>
       <section className="castle-library section" id="stories-library">
         <div className="container">
@@ -603,7 +682,7 @@ function Stories() {
                   <article className="story-card" key={story}>
                     <img src={storyCoverImages[slugify(story)] ?? castle.image} alt={`${story} at ${castle.name}`} loading="lazy" />
                     <div className="story-card-title"><span>Story {index + 1}</span><h3>{story}</h3></div>
-                    <div className="story-card-hover"><span className="story-level">{levels[index]}</span><h3>{story}</h3><p><span>Difficulty</span>{levels[index]}<br /><span>Length</span>{index === 0 ? "20–30 min" : index === 1 ? "35–45 min" : "50–60 min"}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories/${slugify(castle.name)}/${slugify(story)}#top`}>Explore story <ArrowUpRight size={15} /></Link></div>
+                    <div className="story-card-hover"><span className="story-level">{storyExperience[story].difficulty}</span><h3>{story}</h3><p><span>Difficulty</span>{storyExperience[story].difficulty}<br /><span>Length</span>{storyExperience[story].length}<br /><span>Age</span>{castle.age}</p><Link className="text-link" to={`/stories/${slugify(castle.name)}/${slugify(story)}#top`}>Explore story <ArrowUpRight size={15} /></Link></div>
                   </article>
                 ))}
               </div>
@@ -638,7 +717,7 @@ function StoryDetail() {
 
   if (!castle || !story || !summary) return <NotFound />;
 
-  const length = storyIndex === 0 ? "20–30 min" : storyIndex === 1 ? "35–45 min" : "50–60 min";
+  const experience = storyExperience[story];
   const showSlide = (index: number) =>
     setActiveSlide((index + slideLabels.length) % slideLabels.length);
 
@@ -653,8 +732,8 @@ function StoryDetail() {
           <h1>{story}</h1>
           <p className="story-tagline">{summary.tagline}</p>
           <div className="story-detail-meta" aria-label="Story information">
-            <span><small>Difficulty</small>{levels[storyIndex]}</span>
-            <span><small>Length</small>{length}</span>
+            <span><small>Difficulty</small>{experience.difficulty}</span>
+            <span><small>Length</small>{experience.length}</span>
             <span><small>Recommended age</small>{castle.age}</span>
           </div>
         </header>
@@ -721,7 +800,7 @@ function Prices() {
   ];
   return (
     <Layout title="Prices & partnership">
-      <section className="pricing-offer-intro container" id="top">
+      <section className="pricing-offer-intro pricing-content container" id="top">
         <Eyebrow>For castles & historic places</Eyebrow>
         <h1>
           One partnership.
@@ -733,7 +812,7 @@ function Prices() {
           equipped and supported by StoryLens.
         </p>
       </section>
-      <section className="partnership-offer container" id="partnership">
+      <section className="partnership-offer pricing-content container" id="partnership">
         <div className="partnership-terms">
           <Eyebrow>Pay for performance</Eyebrow>
           <h2>
@@ -773,7 +852,7 @@ function Prices() {
           </ul>
         </div>
       </section>
-      <section className="partnership-journey container">
+      <section className="partnership-journey pricing-content container">
         <div>
           <Eyebrow>How we start</Eyebrow>
           <h2>
@@ -796,7 +875,7 @@ function Prices() {
           ))}
         </div>
       </section>
-      <section className="pricing-faq container">
+      <section className="pricing-faq pricing-content container">
         <div>
           <Eyebrow>Good to know</Eyebrow>
           <h2>
