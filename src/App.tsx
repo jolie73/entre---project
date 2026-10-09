@@ -814,27 +814,25 @@ function Prices() {
       </section>
       <section className="partnership-offer pricing-content container" id="partnership">
         <div className="partnership-terms">
-          <Eyebrow>Pay for performance</Eyebrow>
+          <Eyebrow>Subscription + pay for performance</Eyebrow>
           <h2>
             Shared rewards.
             <br />
             <em>A clear partnership.</em>
           </h2>
           <p>
-            Our fee is tied to the additional StoryLens revenue your castle
-            earns. There is one shared model, designed around the experience
-            we create together.
+            Our partnership combines a recurring subscription with a
+            performance-based share of the additional StoryLens revenue
+            your castle earns.
           </p>
           <p className="partnership-split">
-            <strong>80% StoryLens</strong>
-            <span aria-hidden="true">·</span>
-            <strong>20% your castle</strong>
+            <strong>No upfront costs.</strong>
           </p>
           <div className="partnership-note">
             <Check size={18} />
             <span>Your regular admission revenue stays entirely with you.</span>
           </div>
-          <Button to={partnerLink}>Discuss your castle</Button>
+          <Button to={partnerLink}>Contact us</Button>
         </div>
         <div className="partnership-includes" id="services">
           <Eyebrow>What’s included</Eyebrow>
@@ -887,8 +885,8 @@ function Prices() {
         <Faq
           items={[
             [
-              "What does the 80/20 split apply to?",
-              "Only the additional StoryLens surcharge. StoryLens receives 80% and your castle keeps 20%. Your regular admission revenue remains with your castle.",
+              "Are there any upfront costs?",
+              "No. There are no upfront costs. Our partnership uses a recurring subscription and a performance-based share of the additional StoryLens revenue.",
             ],
             [
               "Do you take a share of ordinary admission tickets?",
